@@ -61,24 +61,6 @@ export default function HomeView({ userName, agents, activity, onNewTask, onNewA
           ))}
         </div>
 
-        {/* Industry Solutions */}
-        <div>
-          <h2 className="text-lg font-bold text-gray-900 mb-3">Отраслевые решения</h2>
-          <div className="grid grid-cols-3 gap-3">
-            {solutions.map((s) => (
-              <button
-                key={s.title}
-                className={`relative overflow-hidden bg-gradient-to-br ${s.gradient} rounded-xl p-5 text-white text-left hover:scale-[1.02] transition-transform`}
-              >
-                <span className="text-3xl block mb-2">{s.icon}</span>
-                <p className="font-bold text-sm">{s.title}</p>
-                <p className="text-white/70 text-xs mt-1">Автоматизация с AI-агентами</p>
-                <div className="absolute -right-4 -bottom-4 text-6xl opacity-10">{s.icon}</div>
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Active Agents + Activity Feed */}
         <div className="grid grid-cols-2 gap-6">
           {/* Active Agents */}
@@ -131,6 +113,24 @@ export default function HomeView({ userName, agents, activity, onNewTask, onNewA
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* Industry Solutions */}
+        <div>
+          <h2 className="text-lg font-bold text-gray-900 mb-3">Отраслевые решения</h2>
+          <div className="grid grid-cols-3 gap-3">
+            {solutions.map((s) => (
+              <button
+                key={s.title}
+                className={`relative overflow-hidden bg-gradient-to-br ${s.gradient} rounded-xl p-5 text-white text-left hover:scale-[1.02] transition-transform`}
+              >
+                <span className="text-3xl block mb-2">{s.icon}</span>
+                <p className="font-bold text-sm">{s.title}</p>
+                <p className="text-white/70 text-xs mt-1">Автоматизация с AI-агентами</p>
+                <div className="absolute -right-4 -bottom-4 text-6xl opacity-10">{s.icon}</div>
+              </button>
+            ))}
           </div>
         </div>
       </div>

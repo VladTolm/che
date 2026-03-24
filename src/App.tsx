@@ -9,12 +9,13 @@ import WorkspaceView from "./components/views/WorkspaceView";
 import TeamView from "./components/views/TeamView";
 import NewTaskModal from "./components/modals/NewTaskModal";
 import CreateAITeamModal from "./components/modals/CreateAITeamModal";
+import PersonalAgentView from "./components/personal/PersonalAgentView";
 
 const workspaceColorMap: Record<string, string> = {};
 workspaces.forEach((ws) => { workspaceColorMap[ws.name] = ws.color; });
 
 export default function App() {
-  const [activeNav, setActiveNav] = useState("home");
+  const [activeNav, setActiveNav] = useState("company");
   const [view, setView] = useState<"home" | "task">("home");
   const [selectedWS, setSelectedWS] = useState<Workspace | null>(null);
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
@@ -26,7 +27,7 @@ export default function App() {
     setSelectedWS(null);
     setSelectedTeam(null);
     setActiveNav(id);
-    if (id === "home") setView("home");
+    if (id === "company") setView("home");
     else if (id === "tasks") setView("task");
     else setView("home");
   }
@@ -47,7 +48,7 @@ export default function App() {
     setSelectedWS(null);
     setSelectedTeam(null);
     setView(v);
-    setActiveNav(v === "home" ? "home" : "tasks");
+    setActiveNav(v === "home" ? "company" : "tasks");
   }
 
   function handleMarkAllRead() {
@@ -55,6 +56,9 @@ export default function App() {
   }
 
   function renderContent() {
+    if (activeNav === "gigabrain") {
+      return <PersonalAgentView />;
+    }
     if (selectedWS) {
       return <WorkspaceView ws={selectedWS} allAgents={agents} onNewTask={() => setShowNewTask(true)} />;
     }
@@ -83,7 +87,7 @@ export default function App() {
   }
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full overflow-hidden">
       <Sidebar
         activeNav={activeNav}
         workspaces={workspaces}
@@ -93,16 +97,18 @@ export default function App() {
         onSelectTeam={handleSelectTeam}
       />
       <div className="flex-1 flex flex-col min-w-0 bg-content-bg">
-        <TopBar
-          view={view}
-          selectedWS={selectedWS}
-          selectedTeam={selectedTeam}
-          notifications={notifications}
-          onNavigate={handleNavigate}
-          onNewTask={() => setShowNewTask(true)}
-          onNewAITeam={() => setShowAITeam(true)}
-          onMarkAllRead={handleMarkAllRead}
-        />
+        {activeNav !== "gigabrain" && (
+          <TopBar
+            view={view}
+            selectedWS={selectedWS}
+            selectedTeam={selectedTeam}
+            notifications={notifications}
+            onNavigate={handleNavigate}
+            onNewTask={() => setShowNewTask(true)}
+            onNewAITeam={() => setShowAITeam(true)}
+            onMarkAllRead={handleMarkAllRead}
+          />
+        )}
         {renderContent()}
       </div>
 

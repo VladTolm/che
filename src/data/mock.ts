@@ -96,7 +96,7 @@ export const workspaces: Workspace[] = [
       { id: "a4", type: "complete", agent: "HR-ассистент", action: "завершил скрининг", timestamp: "2026-03-24T12:00:00Z" },
       { id: "a5", type: "data", agent: "Аналитик", action: "загрузил данные из SAP", timestamp: "2026-03-24T11:30:00Z" },
     ],
-    members: ["Алексей М.", "Ирина К.", "Дмитрий С."],
+    members: ["Влад М.", "Ирина К.", "Дмитрий С."],
     budget: { tokens: 1_250_000, cost: 18.75, tasks_total: 12, tasks_done: 8 },
   },
   {
@@ -149,7 +149,7 @@ export const teams: Team[] = [
     id: "team-ops",
     name: "Операционный отдел",
     members: [
-      { name: "Алексей Морозов", role: "Руководитель", email: "a.morozov@company.ru", avatar: "А", color: "from-blue-500 to-indigo-600", canLaunch: true, canApprove: true, canAdmin: true },
+      { name: "Влад Морозов", role: "Руководитель", email: "v.morozov@company.ru", avatar: "В", color: "from-blue-500 to-indigo-600", canLaunch: true, canApprove: true, canAdmin: true },
       { name: "Ирина Козлова", role: "Менеджер", email: "i.kozlova@company.ru", avatar: "И", color: "from-emerald-500 to-teal-600", canLaunch: true, canApprove: true, canAdmin: false },
       { name: "Дмитрий Сидоров", role: "Аналитик", email: "d.sidorov@company.ru", avatar: "Д", color: "from-orange-500 to-red-600", canLaunch: true, canApprove: false, canAdmin: false },
       { name: "Ольга Новикова", role: "Стажёр", email: "o.novikova@company.ru", avatar: "О", color: "from-pink-500 to-rose-600", canLaunch: false, canApprove: false, canAdmin: false },
@@ -157,7 +157,7 @@ export const teams: Team[] = [
     workspaces: ["Закупки Q1", "Рекрутинг"],
     sharedAgents: ["research", "analyst", "doc"],
     activity: [
-      { id: "ta1", type: "complete", agent: "Алексей", action: "согласовал результаты анализа", timestamp: "2026-03-24T14:00:00Z" },
+      { id: "ta1", type: "complete", agent: "Влад", action: "согласовал результаты анализа", timestamp: "2026-03-24T14:00:00Z" },
       { id: "ta2", type: "data", agent: "Ирина", action: "запустила задачу по скринингу", timestamp: "2026-03-24T13:30:00Z" },
       { id: "ta3", type: "approval", agent: "Дмитрий", action: "отправил отчёт на согласование", timestamp: "2026-03-24T12:00:00Z" },
       { id: "ta4", type: "doc", agent: "Ольга", action: "загрузила документы в систему", timestamp: "2026-03-24T11:00:00Z" },
@@ -192,7 +192,7 @@ export const currentTask: Task = {
     { id: 4, title: "Рекомендации", status: "pending" },
     { id: 5, title: "Согласование", status: "pending" },
   ],
-  initiator: "Алексей М.",
+  initiator: "Влад М.",
   deadline: "28 марта 2026",
 };
 
@@ -229,4 +229,4 @@ export const activityFeed: ActivityEntry[] = [
   { id: "f7", type: "data", agent: "Аналитик", action: "загрузил данные из SAP (23 записи)", timestamp: "2026-03-24T11:30:00Z" },
 ];
 
-export const userName = "Алексей";
+export const userName = "Влад";

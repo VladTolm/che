@@ -3,7 +3,8 @@
     "allow": [
       "Bash(npx tsc:*)",
       "Bash(npm run:*)",
-      "Bash(curl -s http://localhost:5174)"
+      "Bash(curl -s http://localhost:5174)",
+      "Bash(wc -l /Users/vtolm/DevProjects/ch_cowork/src/components/**/*.tsx)"
     ]
   }
 }

@@ -1,3 +1,4 @@
+import { X, Calendar, Mail, BarChart3, MessageSquare, ClipboardList, Pencil, FileText, Bot } from "lucide-react";
 import type { ContextConfig } from "../../personalTypes";
 import { personalWorkspaces, personalAgents } from "../../data/personalMock";
 
@@ -14,7 +15,7 @@ export default function ContextPanel({ config, onClose }: Props) {
       <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between shrink-0">
         <span className="text-sm font-semibold text-gray-800">{config.title}</span>
         <button onClick={onClose} className="text-gray-400 hover:text-gray-600 cursor-pointer">
-          ✕
+          <X className="w-4 h-4" />
         </button>
       </div>
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -60,7 +61,7 @@ export default function ContextPanel({ config, onClose }: Props) {
                 .filter((a) => ["research", "doc", "analyst"].includes(a.id))
                 .map((a) => (
                   <div key={a.id} className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50">
-                    <span className="text-lg">{a.icon}</span>
+                    <Bot className="w-5 h-5 text-gray-500" />
                     <div className="flex-1">
                       <div className="text-sm font-medium text-gray-700">{a.name}</div>
                       <div className="text-xs text-gray-400">{a.task}</div>
@@ -125,7 +126,7 @@ export default function ContextPanel({ config, onClose }: Props) {
             <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Детали выполнения</div>
             <div className="p-3 bg-gray-50 rounded-xl space-y-2">
               {[
-                ["Статус", "Завершено ✅"],
+                ["Статус", "Завершено"],
                 ["Время", "2m 15s"],
                 ["Найдено", "12 рейсов"],
                 ["Подходят", "5 рейсов"],
@@ -162,7 +163,7 @@ export default function ContextPanel({ config, onClose }: Props) {
                     <span className="text-gray-400">{s.v}%</span>
                   </div>
                   <div className="w-full h-2 bg-gray-100 rounded-full">
-                    <div className="h-full bg-indigo-400 rounded-full" style={{ width: `${s.v}%` }} />
+                    <div className="h-full bg-gray-400 rounded-full" style={{ width: `${s.v}%` }} />
                   </div>
                 </div>
               ))}
@@ -173,9 +174,14 @@ export default function ContextPanel({ config, onClose }: Props) {
               <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 Доступ (только чтение)
               </div>
-              {["📅 Календарь", "📧 Почта", "📊 Пространства", "💬 Мессенджеры"].map((s) => (
-                <div key={s} className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg">
-                  <span className="text-sm text-gray-700">{s}</span>
+              {[
+                { icon: <Calendar className="w-3.5 h-3.5" />, label: "Календарь" },
+                { icon: <Mail className="w-3.5 h-3.5" />, label: "Почта" },
+                { icon: <BarChart3 className="w-3.5 h-3.5" />, label: "Пространства" },
+                { icon: <MessageSquare className="w-3.5 h-3.5" />, label: "Мессенджеры" },
+              ].map((s) => (
+                <div key={s.label} className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg">
+                  <span className="text-sm text-gray-700 flex items-center gap-1.5">{s.icon} {s.label}</span>
                   <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded">чтение</span>
                 </div>
               ))}
@@ -184,10 +190,14 @@ export default function ContextPanel({ config, onClose }: Props) {
             {/* Write access */}
             <div className="space-y-2">
               <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Запись</div>
-              {["📋 Мои задачи", "📝 Заметки", "📄 Черновики"].map((s) => (
-                <div key={s} className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg">
-                  <span className="text-sm text-gray-700">{s}</span>
-                  <span className="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">запись</span>
+              {[
+                { icon: <ClipboardList className="w-3.5 h-3.5" />, label: "Мои задачи" },
+                { icon: <Pencil className="w-3.5 h-3.5" />, label: "Заметки" },
+                { icon: <FileText className="w-3.5 h-3.5" />, label: "Черновики" },
+              ].map((s) => (
+                <div key={s.label} className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg">
+                  <span className="text-sm text-gray-700 flex items-center gap-1.5">{s.icon} {s.label}</span>
+                  <span className="text-xs text-gray-700 bg-gray-100 px-2 py-0.5 rounded">запись</span>
                 </div>
               ))}
             </div>

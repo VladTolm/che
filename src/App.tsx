@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Workspace, Team } from "./types";
-import { agents, workspaces, teams, currentTask, chatMessages, notifications as initialNotifications, activityFeed, userName } from "./data/mock";
+import { agents, workspaces, teams, currentTask, chatMessages, executionLog, taskDocTree, notifications as initialNotifications, activityFeed, userName } from "./data/mock";
 import Sidebar from "./components/layout/Sidebar";
 import TopBar from "./components/layout/TopBar";
 import HomeView from "./components/views/HomeView";
@@ -73,11 +73,12 @@ export default function App() {
           activity={activityFeed}
           onNewTask={() => setShowNewTask(true)}
           onNewAITeam={() => setShowAITeam(true)}
+          onNavigateToTask={() => handleNavigate("task")}
         />
       );
     }
     if (view === "task") {
-      return <TaskView task={currentTask} messages={chatMessages} agents={agents} />;
+      return <TaskView task={currentTask} executionLog={executionLog} docTree={taskDocTree} />;
     }
     return (
       <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">

@@ -1,6 +1,17 @@
 import { useState } from "react";
 import type { Workspace, Team } from "../../types";
 import SidebarTooltip from "../shared/SidebarTooltip";
+import {
+  Building2,
+  Brain,
+  ClipboardList,
+  ScrollText,
+  Bot,
+  Package,
+  Wrench,
+  Users,
+  Settings,
+} from "lucide-react";
 
 interface Props {
   activeNav: string;
@@ -13,45 +24,37 @@ interface Props {
 
 /* Group 1: Main modes */
 const mainModes = [
-  { id: "company", icon: "🏢", label: "Компания" },
-  { id: "gigabrain", icon: "🧠", label: "ГигаМозг", badge: 3, isGigabrain: true },
+  { id: "company", icon: Building2, label: "Компания" },
+  { id: "gigabrain", icon: Brain, label: "ГигаМозг", badge: 3, isGigabrain: true },
 ];
 
 /* Group 2: Daily */
 const dailyItems = [
-  { id: "tasks", icon: "📋", label: "Задачи", badge: 5 },
-  { id: "history", icon: "📜", label: "История" },
+  { id: "tasks", icon: ClipboardList, label: "Задачи", badge: 5 },
+  { id: "history", icon: ScrollText, label: "История" },
 ];
 
 /* Group 3: Configuration */
 const configItems = [
-  { id: "agents", icon: "🤖", label: "Агенты" },
-  { id: "templates", icon: "📦", label: "Шаблоны" },
-  { id: "skills", icon: "🔧", label: "Skills" },
+  { id: "agents", icon: Bot, label: "Агенты" },
+  { id: "templates", icon: Package, label: "Шаблоны" },
+  { id: "skills", icon: Wrench, label: "Skills" },
 ];
 
 export default function Sidebar({ activeNav, workspaces, teams, onNav, onSelectWS, onSelectTeam }: Props) {
   const [wsTooltip, setWsTooltip] = useState(false);
   const [teamTooltip, setTeamTooltip] = useState(false);
 
-  function renderNavItem(item: { id: string; icon: string; label: string; badge?: number; isGigabrain?: boolean }, style: "main" | "daily" | "config") {
+  function renderNavItem(item: { id: string; icon: React.ComponentType<{ className?: string }>; label: string; badge?: number; isGigabrain?: boolean }, style: "main" | "daily" | "config") {
     const isActive = activeNav === item.id;
     const isGigabrain = item.isGigabrain;
+    const Icon = item.icon;
 
-    let cls: string;
-    if (isGigabrain) {
-      cls = isActive
-        ? "bg-indigo-600/20 text-indigo-300 ring-1 ring-indigo-500/30"
-        : "text-gray-400 hover:text-gray-200 hover:bg-gray-800/50";
-    } else if (style === "config") {
-      cls = isActive
-        ? "bg-gray-800 text-white"
-        : "text-gray-500 hover:text-gray-300 hover:bg-gray-800/50";
-    } else {
-      cls = isActive
-        ? "bg-gray-800 text-white"
-        : "text-gray-400 hover:text-gray-200 hover:bg-gray-800/50";
-    }
+    const cls = isActive
+      ? "bg-gray-100 text-gray-900 font-medium"
+      : style === "config"
+        ? "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+        : "text-gray-700 hover:text-gray-900 hover:bg-gray-50";
 
     const padding = style === "config" ? "px-3 py-2" : "px-3 py-2.5";
 
@@ -61,15 +64,15 @@ export default function Sidebar({ activeNav, workspaces, teams, onNav, onSelectW
         onClick={() => onNav(item.id)}
         className={`w-full flex items-center gap-3 ${padding} rounded-lg text-xs transition-colors cursor-pointer ${cls}`}
       >
-        <span className="text-base relative">
-          {item.icon}
+        <span className="relative">
+          <Icon className="w-5 h-5" />
           {isGigabrain && (
-            <span className="absolute -top-0.5 -right-1 w-1.5 h-1.5 bg-indigo-400 rounded-full animate-pulse-dot" />
+            <span className="absolute -top-0.5 -right-1 w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse-dot" />
           )}
         </span>
         <span className="flex-1 text-left">{item.label}</span>
         {item.badge != null && (
-          <span className={`text-white text-[10px] font-medium px-1.5 py-0.5 rounded-full ${isGigabrain ? "bg-indigo-500" : "bg-orange-500"}`}>
+          <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${isGigabrain ? "bg-green-500 text-white" : "bg-gray-100 text-gray-600"}`}>
             {item.badge}
           </span>
         )}
@@ -78,18 +81,12 @@ export default function Sidebar({ activeNav, workspaces, teams, onNav, onSelectW
   }
 
   return (
-    <aside className="w-64 bg-gray-900 flex flex-col shrink-0 h-full">
+    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col shrink-0 h-full">
       {/* Logo */}
-      <div className="px-4 py-4 border-b border-gray-800">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500 to-amber-400 flex items-center justify-center text-white font-bold text-sm shadow-lg">
-            W
-          </div>
-          <div>
-            <span className="text-white font-bold text-sm tracking-tight">Wukong</span>
-            <p className="text-gray-500 text-xs">AI Operations</p>
-          </div>
-        </div>
+      <div className="px-4 py-4 border-b border-gray-200">
+        <span className="text-gray-900 font-extrabold text-sm uppercase tracking-tight">
+          ГИГАЧАТ БИЗНЕС
+        </span>
       </div>
 
       {/* Navigation */}
@@ -100,21 +97,21 @@ export default function Sidebar({ activeNav, workspaces, teams, onNav, onSelectW
         </div>
 
         {/* Group 2: Daily */}
-        <div className="border-t border-gray-800 mt-3 pt-3 space-y-0.5">
+        <div className="border-t border-gray-200 mt-3 pt-3 space-y-0.5">
           {dailyItems.map((item) => renderNavItem(item, "daily"))}
         </div>
 
         {/* Group 3: Configuration */}
-        <div className="border-t border-gray-800 mt-3 pt-3 space-y-0.5">
+        <div className="border-t border-gray-200 mt-3 pt-3 space-y-0.5">
           {configItems.map((item) => renderNavItem(item, "config"))}
         </div>
 
         {/* Group 4: Workspaces */}
-        <div className="relative border-t border-gray-800 mt-3 pt-3">
+        <div className="relative border-t border-gray-200 mt-3 pt-3">
           <div className="flex items-center justify-between px-3 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-gray-600">Пространства</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">Пространства</span>
             <button
-              className="text-gray-500 hover:text-gray-300 text-xs cursor-pointer"
+              className="text-gray-400 hover:text-gray-600 text-xs cursor-pointer"
               onMouseEnter={() => setWsTooltip(true)}
               onMouseLeave={() => setWsTooltip(false)}
             >
@@ -131,27 +128,27 @@ export default function Sidebar({ activeNav, workspaces, teams, onNav, onSelectW
               onClick={() => onSelectWS(ws)}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs transition-colors cursor-pointer ${
                 activeNav === ws.id
-                  ? "bg-gray-800 text-white"
-                  : "text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
+                  ? "bg-gray-100 text-gray-900"
+                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
               }`}
             >
               <span className={`w-2 h-2 rounded-full ${ws.color}`} />
               <span className="flex-1 text-left truncate">{ws.name}</span>
-              <span className="text-xs text-gray-600">{ws.count}</span>
+              <span className="text-xs text-gray-400">{ws.count}</span>
             </button>
           ))}
-          <button className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-600 hover:text-gray-400 transition-colors cursor-pointer">
+          <button className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
             <span>+</span>
             <span>Добавить</span>
           </button>
         </div>
 
         {/* Group 5: Teams */}
-        <div className="relative border-t border-gray-800 mt-3 pt-3">
+        <div className="relative border-t border-gray-200 mt-3 pt-3">
           <div className="flex items-center justify-between px-3 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-gray-600">Команды</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">Команды</span>
             <button
-              className="text-gray-500 hover:text-gray-300 text-xs cursor-pointer"
+              className="text-gray-400 hover:text-gray-600 text-xs cursor-pointer"
               onMouseEnter={() => setTeamTooltip(true)}
               onMouseLeave={() => setTeamTooltip(false)}
             >
@@ -168,44 +165,44 @@ export default function Sidebar({ activeNav, workspaces, teams, onNav, onSelectW
               onClick={() => onSelectTeam(team)}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs transition-colors cursor-pointer ${
                 activeNav === team.id
-                  ? "bg-gray-800 text-white"
-                  : "text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
+                  ? "bg-gray-100 text-gray-900"
+                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
               }`}
             >
-              <span className="text-sm">👥</span>
+              <Users className="w-4 h-4" />
               <span className="flex-1 text-left truncate">{team.name}</span>
-              <span className="text-xs text-gray-600">{team.members.length}</span>
+              <span className="text-xs text-gray-400">{team.members.length}</span>
             </button>
           ))}
         </div>
 
         {/* Group 6: Settings */}
-        <div className="border-t border-gray-800 mt-3 pt-3">
+        <div className="border-t border-gray-200 mt-3 pt-3">
           <button
             onClick={() => onNav("settings")}
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs transition-colors cursor-pointer ${
               activeNav === "settings"
-                ? "bg-gray-800 text-white"
-                : "text-gray-500 hover:text-gray-300 hover:bg-gray-800/50"
+                ? "bg-gray-100 text-gray-900"
+                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
             }`}
           >
-            <span className="text-base">⚙️</span>
+            <Settings className="w-5 h-5" />
             <span className="flex-1 text-left">Настройки</span>
           </button>
         </div>
       </nav>
 
       {/* User profile */}
-      <div className="border-t border-gray-800 px-3 py-3 flex items-center gap-3">
+      <div className="border-t border-gray-200 px-3 py-3 flex items-center gap-3">
         <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold">
           В
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-xs text-white font-medium truncate">Влад</p>
-          <p className="text-xs text-gray-500 truncate">Закупки</p>
+          <p className="text-xs text-gray-900 font-medium truncate">Влад</p>
+          <p className="text-xs text-gray-500 truncate">CEO</p>
         </div>
-        <button className="text-gray-500 hover:text-gray-300 cursor-pointer">
-          <span className="text-sm">⚙️</span>
+        <button className="text-gray-400 hover:text-gray-600 cursor-pointer">
+          <Settings className="w-4 h-4" />
         </button>
       </div>
     </aside>

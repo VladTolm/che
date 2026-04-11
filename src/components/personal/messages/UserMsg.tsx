@@ -7,7 +7,7 @@ interface Props {
 export default function UserMsg({ children }: Props) {
   return (
     <div className="flex justify-end animate-fade-in">
-      <div className="bg-indigo-600 text-white rounded-2xl rounded-tr-md px-4 py-2.5 max-w-md text-sm shadow-sm">
+      <div className="bg-gray-900 text-white rounded-2xl rounded-tr-md px-4 py-2.5 max-w-md text-sm">
         {children}
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import type { PersonalWorkspace, ContextConfig } from "../../personalTypes";
 
 interface Props {
@@ -16,16 +17,16 @@ export default function PersonalWorkspacesView({ workspaces, onSelectWorkspace }
               onClick={() =>
                 onSelectWorkspace({
                   type: "workspace",
-                  title: `📦 ${ws.name}`,
+                  title: ws.name,
                   data: { ws },
                 })
               }
-              className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:border-gray-300 transition-colors cursor-pointer"
             >
               <div className="p-5">
                 <div className="flex items-center gap-3 mb-3">
                   <div
-                    className={`w-10 h-10 rounded-xl ${ws.color} flex items-center justify-center text-white text-lg font-bold shadow-sm`}
+                    className={`w-10 h-10 rounded-xl ${ws.color} flex items-center justify-center text-white text-lg font-bold`}
                   >
                     {ws.name[0]}
                   </div>
@@ -72,9 +73,9 @@ export default function PersonalWorkspacesView({ workspaces, onSelectWorkspace }
             </div>
           ))}
           {/* Add workspace */}
-          <div className="bg-white rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center p-8 hover:border-orange-300 hover:bg-orange-50 cursor-pointer transition-colors">
+          <div className="bg-white rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center p-8 hover:border-gray-400 hover:bg-gray-50 cursor-pointer transition-colors">
             <div className="text-center">
-              <div className="text-2xl mb-2">+</div>
+              <Plus className="w-6 h-6 mx-auto mb-2 text-gray-400" />
               <div className="text-sm text-gray-400">Создать пространство</div>
             </div>
           </div>

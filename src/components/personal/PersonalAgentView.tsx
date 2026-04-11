@@ -15,7 +15,7 @@ export default function PersonalAgentView() {
 
   const handleToggleContext = () => {
     setContextPanel(
-      contextPanel ? null : { type: "workspace", title: "📦 Закупки", data: { ws: personalWorkspaces[0] } }
+      contextPanel ? null : { type: "workspace", title: "Закупки", data: { ws: personalWorkspaces[0] } }
     );
   };
 

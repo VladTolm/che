@@ -3,6 +3,7 @@ const config: Record<string, { bg: string; text: string }> = {
   pdf: { bg: "bg-red-100", text: "text-red-700" },
   csv: { bg: "bg-blue-100", text: "text-blue-700" },
   docx: { bg: "bg-indigo-100", text: "text-indigo-700" },
+  md: { bg: "bg-gray-100", text: "text-gray-600" },
 };
 
 export default function FileIcon({ type }: { type: string }) {

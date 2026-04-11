@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import type { Notification, Workspace, Team } from "../../types";
 import { relativeTime } from "../../utils/helpers";
+import { Bot, Plus, Bell, AlertTriangle, CheckCircle, XCircle, MessageSquare } from "lucide-react";
 
 interface Props {
   view: "home" | "task";
@@ -13,11 +14,11 @@ interface Props {
   onMarkAllRead: () => void;
 }
 
-const notifIcons: Record<string, string> = {
-  approval_needed: "⚠️",
-  task_completed: "✅",
-  error: "❌",
-  mention: "💬",
+const notifIcons: Record<string, React.ReactNode> = {
+  approval_needed: <AlertTriangle className="w-4 h-4 text-amber-500" />,
+  task_completed: <CheckCircle className="w-4 h-4 text-green-500" />,
+  error: <XCircle className="w-4 h-4 text-red-500" />,
+  mention: <MessageSquare className="w-4 h-4 text-gray-500" />,
 };
 
 export default function TopBar({ view, selectedWS, selectedTeam, notifications, onNavigate, onNewTask, onNewAITeam, onMarkAllRead }: Props) {
@@ -65,7 +66,7 @@ export default function TopBar({ view, selectedWS, selectedTeam, notifications, 
         </button>
         {breadcrumb && (
           <span className="text-sm text-gray-400 ml-2">
-            › <span className="text-orange-500 font-medium">{breadcrumb}</span>
+            › <span className="text-gray-900 font-medium">{breadcrumb}</span>
           </span>
         )}
       </div>
@@ -76,15 +77,17 @@ export default function TopBar({ view, selectedWS, selectedTeam, notifications, 
       <div className="flex items-center gap-2">
         <button
           onClick={onNewAITeam}
-          className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium text-gray-700 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium text-gray-700 transition-colors"
         >
-          🤖 AI-команда
+          <Bot className="w-4 h-4" />
+          AI-команда
         </button>
         <button
           onClick={onNewTask}
-          className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 rounded-lg text-sm font-medium text-white transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 hover:bg-gray-800 rounded-lg text-sm font-medium text-white transition-colors"
         >
-          + Задача
+          <Plus className="w-4 h-4" />
+          Задача
         </button>
 
         {/* Search */}
@@ -97,11 +100,11 @@ export default function TopBar({ view, selectedWS, selectedTeam, notifications, 
             onFocus={() => setSearchFocused(true)}
             onBlur={() => { setSearchFocused(false); setSearchQuery(""); }}
             className={`bg-gray-50 border border-gray-200 rounded-lg text-sm px-3 py-1.5 outline-none transition-all duration-200 ${
-              searchFocused ? "w-64 ring-2 ring-orange-500/30 border-orange-300" : "w-28"
+              searchFocused ? "w-64 ring-2 ring-gray-400/30 border-gray-400" : "w-28"
             }`}
           />
           {searchFocused && searchQuery.length > 0 && (
-            <div className="absolute right-0 top-full mt-1 w-80 bg-white rounded-xl shadow-lg border border-gray-200 p-2 z-50 animate-tooltip-enter">
+            <div className="absolute right-0 top-full mt-1 w-80 bg-white rounded-xl border border-gray-200 p-2 z-50 animate-tooltip-enter">
               <p className="text-xs text-gray-400 px-2 py-1">Результаты поиска</p>
               <div className="px-2 py-1.5 hover:bg-gray-50 rounded-lg cursor-pointer">
                 <p className="text-sm font-medium text-gray-800">Анализ поставщиков</p>
@@ -121,7 +124,7 @@ export default function TopBar({ view, selectedWS, selectedTeam, notifications, 
             onClick={() => setShowNotifs(!showNotifs)}
             className="relative p-1.5 text-gray-500 hover:text-gray-700 transition-colors"
           >
-            <span className="text-lg">🔔</span>
+            <Bell className="w-5 h-5" />
             {unreadCount > 0 && (
               <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                 {unreadCount}
@@ -129,10 +132,10 @@ export default function TopBar({ view, selectedWS, selectedTeam, notifications, 
             )}
           </button>
           {showNotifs && (
-            <div className="absolute right-0 top-full mt-1 w-80 bg-white rounded-xl shadow-lg border border-gray-200 z-50 animate-tooltip-enter">
+            <div className="absolute right-0 top-full mt-1 w-80 bg-white rounded-xl border border-gray-200 z-50 animate-tooltip-enter">
               <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
                 <span className="text-sm font-semibold text-gray-800">Уведомления</span>
-                <button onClick={onMarkAllRead} className="text-xs text-orange-500 hover:text-orange-600">
+                <button onClick={onMarkAllRead} className="text-xs text-gray-500 hover:text-gray-700">
                   Отметить все как прочитанные
                 </button>
               </div>
@@ -141,11 +144,11 @@ export default function TopBar({ view, selectedWS, selectedTeam, notifications, 
                   <div
                     key={n.id}
                     className={`px-4 py-3 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors ${
-                      !n.read ? "bg-orange-50/30" : ""
+                      !n.read ? "bg-gray-50/50" : ""
                     }`}
                   >
                     <div className="flex items-start gap-2">
-                      <span className="text-sm mt-0.5">{notifIcons[n.type]}</span>
+                      <span className="mt-0.5">{notifIcons[n.type]}</span>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-800">{n.title}</p>
                         <p className="text-xs text-gray-500 truncate">{n.body}</p>

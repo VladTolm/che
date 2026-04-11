@@ -3,6 +3,7 @@ import StatusBadge from "../shared/StatusBadge";
 import FileIcon from "../shared/FileIcon";
 import ActivityIcon from "../shared/ActivityIcon";
 import { formatTokens, relativeTime } from "../../utils/helpers";
+import { Settings, Plus, Bot } from "lucide-react";
 
 interface Props {
   ws: Workspace;
@@ -26,11 +27,13 @@ export default function WorkspaceView({ ws, allAgents, onNewTask }: Props) {
             <p className="text-sm text-gray-500 mt-1">{ws.desc}</p>
           </div>
           <div className="flex gap-2">
-            <button className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-gray-700 transition-colors">
-              ⚙️ Настройки
+            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-gray-700 transition-colors">
+              <Settings className="w-3.5 h-3.5" />
+              Настройки
             </button>
-            <button onClick={onNewTask} className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 rounded-lg text-sm text-white transition-colors">
-              + Новая задача
+            <button onClick={onNewTask} className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 hover:bg-gray-800 rounded-lg text-sm text-white transition-colors">
+              <Plus className="w-3.5 h-3.5" />
+              Новая задача
             </button>
           </div>
         </div>
@@ -38,19 +41,19 @@ export default function WorkspaceView({ ws, allAgents, onNewTask }: Props) {
         {/* Stats */}
         <div className="grid grid-cols-4 gap-3">
           <div className="bg-white rounded-xl border border-gray-100 p-4">
-            <p className="text-2xl font-bold text-green-600">{ws.tasks.filter((t) => t.status === "active").length}</p>
+            <p className="text-2xl font-bold text-gray-900">{ws.tasks.filter((t) => t.status === "active").length}</p>
             <p className="text-xs text-gray-500 mt-1">Активных задач</p>
           </div>
           <div className="bg-white rounded-xl border border-gray-100 p-4">
-            <p className="text-2xl font-bold text-blue-600">{wsAgents.length}</p>
+            <p className="text-2xl font-bold text-gray-900">{wsAgents.length}</p>
             <p className="text-xs text-gray-500 mt-1">Агентов подключено</p>
           </div>
           <div className="bg-white rounded-xl border border-gray-100 p-4">
-            <p className="text-2xl font-bold text-purple-600">{ws.budget.tasks_done}/{ws.budget.tasks_total}</p>
+            <p className="text-2xl font-bold text-gray-900">{ws.budget.tasks_done}/{ws.budget.tasks_total}</p>
             <p className="text-xs text-gray-500 mt-1">Задач завершено</p>
           </div>
           <div className="bg-white rounded-xl border border-gray-100 p-4">
-            <p className="text-2xl font-bold text-orange-600">{formatTokens(ws.budget.tokens)}</p>
+            <p className="text-2xl font-bold text-gray-900">{formatTokens(ws.budget.tokens)}</p>
             <p className="text-xs text-gray-500 mt-1">Расход токенов</p>
           </div>
         </div>
@@ -80,8 +83,8 @@ export default function WorkspaceView({ ws, allAgents, onNewTask }: Props) {
                     <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full ${
-                          task.status === "active" ? "bg-orange-500" :
-                          task.status === "waiting" ? "bg-amber-500" : "bg-blue-500"
+                          task.status === "active" ? "bg-green-500" :
+                          task.status === "waiting" ? "bg-gray-400" : "bg-gray-500"
                         }`}
                         style={{ width: `${task.progress}%` }}
                       />
@@ -98,7 +101,7 @@ export default function WorkspaceView({ ws, allAgents, onNewTask }: Props) {
                 {wsAgents.map((agent) => (
                   <div key={agent.id} className="bg-white rounded-xl border border-gray-100 p-3">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-lg">{agent.icon}</span>
+                      <Bot className="w-5 h-5 text-gray-500" />
                       <span className="text-sm font-semibold text-gray-800">{agent.name}</span>
                       <StatusBadge status={agent.status} />
                     </div>
@@ -131,7 +134,7 @@ export default function WorkspaceView({ ws, allAgents, onNewTask }: Props) {
                     </div>
                   </div>
                 ))}
-                <button className="w-full py-2 text-xs text-gray-500 hover:text-orange-500 transition-colors">
+                <button className="w-full py-2 text-xs text-gray-500 hover:text-gray-700 transition-colors">
                   + Загрузить документ
                 </button>
               </div>

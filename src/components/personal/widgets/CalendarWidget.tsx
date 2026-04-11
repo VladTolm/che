@@ -1,3 +1,4 @@
+import { Calendar, AlertTriangle, Sparkles } from "lucide-react";
 import type { CalendarEvent } from "../../../personalTypes";
 
 interface Props {
@@ -8,7 +9,9 @@ export default function CalendarWidget({ events }: Props) {
   return (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden max-w-lg animate-fade-in">
       <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-        <span className="text-sm font-semibold text-gray-700">📅 Расписание — Вт, 25 марта</span>
+        <span className="text-sm font-semibold text-gray-700 flex items-center gap-1.5">
+          <Calendar className="w-4 h-4 text-gray-500" /> Расписание — Вт, 25 марта
+        </span>
         <span className="text-xs text-gray-400">{events.length} встречи</span>
       </div>
       {events.map((e, i) => (
@@ -22,12 +25,16 @@ export default function CalendarWidget({ events }: Props) {
           <div className="flex-1 min-w-0">
             <div className="text-sm text-gray-800 font-medium">{e.title}</div>
             {e.agentPrep && (
-              <div className="text-xs text-indigo-500 mt-0.5">✨ {e.agentPrep}</div>
+              <div className="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
+                <Sparkles className="w-3 h-3" /> {e.agentPrep}
+              </div>
             )}
           </div>
           <span className="text-xs text-gray-400 shrink-0">{e.duration}</span>
           {e.urgent && (
-            <span className="px-1.5 py-0.5 bg-red-100 text-red-600 rounded text-xs shrink-0">⚠️</span>
+            <span className="px-1.5 py-0.5 bg-red-100 text-red-600 rounded text-xs shrink-0">
+              <AlertTriangle className="w-3 h-3" />
+            </span>
           )}
         </div>
       ))}

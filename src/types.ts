@@ -107,6 +107,19 @@ export interface ChatMessage {
   type?: "plan" | "result" | "tool" | "progress";
 }
 
+export interface ExecutionLogGroup {
+  id: string;
+  reasoningCount: number;
+  actions: string[];
+}
+
+export interface DocTreeItem {
+  name: string;
+  type: "folder" | "file";
+  fileType?: string;
+  children?: DocTreeItem[];
+}
+
 export interface AITeam {
   name: string;
   goal: string;

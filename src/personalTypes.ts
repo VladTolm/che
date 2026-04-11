@@ -95,10 +95,10 @@ export interface PersonalAgent {
 }
 
 export const PRIORITY_COLORS: Record<string, string> = {
-  P0: "bg-red-500",
-  P1: "bg-orange-500",
-  P2: "bg-amber-400",
-  P3: "bg-gray-400",
+  P0: "bg-gray-900",
+  P1: "bg-gray-700",
+  P2: "bg-gray-400",
+  P3: "bg-gray-300",
 };
 
 /** All demo states that include a given scenario (for cumulative message rendering) */

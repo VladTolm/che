@@ -4,7 +4,9 @@
       "Bash(npx tsc:*)",
       "Bash(npm run:*)",
       "Bash(curl -s http://localhost:5174)",
-      "Bash(wc -l /Users/vtolm/DevProjects/ch_cowork/src/components/**/*.tsx)"
+      "Bash(wc -l /Users/vtolm/DevProjects/ch_cowork/src/components/**/*.tsx)",
+      "Bash(grep -n \"bg-black\\\\|bg-white\\\\|#fff\\\\|#000\" /Users/vtolm/DevProjects/ch_cowork/src/components/modals/*.tsx)",
+      "Bash(npx vite:*)"
     ]
   }
 }

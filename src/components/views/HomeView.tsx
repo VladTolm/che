@@ -1,38 +1,61 @@
-import type { Agent, ActivityEntry } from "../../types";
+import { useState } from "react";
+import type { ActivityEntry } from "../../types";
+import { activeTasks } from "../../data/mock";
 import StatusBadge from "../shared/StatusBadge";
 import ActivityIcon from "../shared/ActivityIcon";
 import { relativeTime } from "../../utils/helpers";
+import {
+  Bot, Package, Link, Sparkles,
+  ShoppingCart, Banknote, UserSearch, Scale, Factory, BarChart3,
+  ChevronRight, ArrowUp, X, FolderPlus, Pencil, SlidersHorizontal, CalendarDays,
+} from "lucide-react";
 
 interface Props {
   userName: string;
-  agents: Agent[];
+  agents: { id: string; name: string; status: "active" | "waiting" | "completed" | "idle"; task: string; step: string; progress: number }[];
   activity: ActivityEntry[];
   onNewTask: () => void;
   onNewAITeam: () => void;
+  onNavigateToTask: () => void;
 }
 
 const solutions = [
-  { title: "E-commerce", gradient: "from-orange-500 to-amber-500", icon: "🛒" },
-  { title: "Финансы", gradient: "from-emerald-500 to-teal-500", icon: "💰" },
-  { title: "Рекрутинг", gradient: "from-blue-500 to-cyan-500", icon: "👥" },
-  { title: "Юриспруденция", gradient: "from-purple-500 to-violet-500", icon: "⚖️" },
-  { title: "Производство", gradient: "from-rose-500 to-pink-500", icon: "🏭" },
-  { title: "Аналитика", gradient: "from-indigo-500 to-blue-500", icon: "📊" },
+  { title: "E-commerce", icon: ShoppingCart, bg: "bg-gray-900" },
+  { title: "Финансы", icon: Banknote, bg: "bg-gray-800" },
+  { title: "Рекрутинг", icon: UserSearch, bg: "bg-gray-700" },
+  { title: "Юриспруденция", icon: Scale, bg: "bg-gray-900" },
+  { title: "Производство", icon: Factory, bg: "bg-gray-800" },
+  { title: "Аналитика", icon: BarChart3, bg: "bg-gray-700" },
 ];
 
 const quickStart = [
-  { icon: "🤖", label: "Создать AI-команду", subtitle: "Собрать группу агентов", action: "aiTeam" as const },
-  { icon: "📦", label: "Выбрать шаблон", subtitle: "Готовые решения", action: "template" as const },
-  { icon: "🚀", label: "Запустить задачу", subtitle: "Новое задание для AI", action: "task" as const },
-  { icon: "🔗", label: "Подключить систему", subtitle: "Интеграции и API", action: "integration" as const },
+  { icon: Bot, label: "Создать AI-команду", subtitle: "Собрать группу агентов", action: "aiTeam" as const },
+  { icon: Package, label: "Выбрать шаблон", subtitle: "Готовые решения", action: "template" as const },
+  { icon: Link, label: "Подключить систему", subtitle: "Интеграции и API", action: "integration" as const },
+  { icon: Sparkles, label: "Придумай свою", subtitle: "Своя автоматизация", action: "custom" as const },
 ];
 
-export default function HomeView({ userName, agents, activity, onNewTask, onNewAITeam }: Props) {
+export default function HomeView({ userName, agents, activity, onNewTask, onNewAITeam, onNavigateToTask }: Props) {
+  const [chatInput, setChatInput] = useState("");
+  const [contexts, setContexts] = useState([{ id: "giga", label: "giga" }]);
+
   const activeAgents = agents.filter((a) => a.status !== "idle");
+  const runningTasks = activeTasks.filter((t) => t.status === "active").length;
+  const waitingTasks = activeTasks.filter((t) => t.status === "waiting").length;
 
   function handleQuickStart(action: string) {
-    if (action === "task") onNewTask();
     if (action === "aiTeam") onNewAITeam();
+  }
+
+  function handleChatSubmit() {
+    if (chatInput.trim()) {
+      onNewTask();
+      setChatInput("");
+    }
+  }
+
+  function removeContext(id: string) {
+    setContexts((prev) => prev.filter((c) => c.id !== id));
   }
 
   return (
@@ -42,61 +65,105 @@ export default function HomeView({ userName, agents, activity, onNewTask, onNewA
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Доброе утро, {userName}</h1>
           <p className="text-gray-500 text-sm mt-1">
-            {activeAgents.length} {activeAgents.length === 1 ? "агент работает" : "агента работают"} · 2 задачи требуют внимания
+            {runningTasks} {runningTasks === 1 ? "задача исполняется" : "задачи исполняются"} · {waitingTasks} {waitingTasks === 1 ? "требует внимания" : "требуют внимания"}
           </p>
         </div>
 
-        {/* Quick Start */}
-        <div className="grid grid-cols-4 gap-3">
-          {quickStart.map((item) => (
-            <button
-              key={item.label}
-              onClick={() => handleQuickStart(item.action)}
-              className="bg-white rounded-xl p-4 text-left hover:shadow-md transition-shadow border border-gray-100 group"
-            >
-              <span className="text-2xl block mb-2 group-hover:scale-110 transition-transform inline-block">{item.icon}</span>
-              <p className="font-semibold text-sm text-gray-800">{item.label}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{item.subtitle}</p>
-            </button>
-          ))}
+        {/* Chat Form */}
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
+          <div className="p-4 pb-0">
+            <input
+              type="text"
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleChatSubmit()}
+              placeholder="Как я могу вам помочь сегодня?"
+              className="w-full text-base text-gray-900 placeholder:text-gray-400 outline-none bg-transparent"
+            />
+          </div>
+          <div className="px-4 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {contexts.map((ctx) => (
+                <span
+                  key={ctx.id}
+                  className="bg-gray-100 rounded-lg px-3 py-1 flex items-center gap-1.5 text-sm text-gray-700"
+                >
+                  <FolderPlus className="w-3.5 h-3.5 text-gray-400" />
+                  {ctx.label}
+                  <button onClick={() => removeContext(ctx.id)} className="text-gray-400 hover:text-gray-600">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              ))}
+              <button className="text-gray-400 hover:text-gray-600 p-1">
+                <Pencil className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              <button className="text-gray-400 hover:text-gray-600 p-1">
+                <SlidersHorizontal className="w-4.5 h-4.5" />
+              </button>
+              <button className="text-gray-400 hover:text-gray-600 p-1">
+                <CalendarDays className="w-4.5 h-4.5" />
+              </button>
+              <button
+                onClick={handleChatSubmit}
+                className="w-9 h-9 bg-gray-900 hover:bg-gray-800 rounded-full flex items-center justify-center text-white transition-colors"
+              >
+                <ArrowUp className="w-4.5 h-4.5" />
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Active Agents + Activity Feed */}
+        {/* Active Tasks + Activity Feed */}
         <div className="grid grid-cols-2 gap-6">
-          {/* Active Agents */}
-          <div className="bg-white rounded-xl border border-gray-100">
-            <div className="px-4 py-3 border-b border-gray-100">
-              <h3 className="font-bold text-sm text-gray-800">Активные агенты</h3>
+          {/* Active Tasks */}
+          <div className="bg-white rounded-xl border border-gray-200">
+            <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+              <h3 className="font-bold text-sm text-gray-800">Активные задачи</h3>
+              <span className="text-xs text-gray-400">{activeTasks.length}</span>
             </div>
             <div className="divide-y divide-gray-50">
-              {activeAgents.map((agent) => (
-                <div key={agent.id} className="px-4 py-3">
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm">{agent.icon}</span>
-                      <span className="text-sm font-semibold text-gray-800">{agent.name}</span>
-                      <StatusBadge status={agent.status} dashboardVariant />
+              {activeTasks.map((task) => {
+                const isNavigable = task.navigable;
+                const Wrapper = isNavigable ? "button" : "div";
+                return (
+                  <Wrapper
+                    key={task.id}
+                    {...(isNavigable ? { onClick: onNavigateToTask } : {})}
+                    className={`w-full px-4 py-3 text-left ${isNavigable ? "hover:bg-gray-50 transition-colors cursor-pointer group" : ""}`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <h4 className="text-sm font-semibold text-gray-800 truncate pr-2">{task.name}</h4>
+                      {isNavigable && (
+                        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors shrink-0" />
+                      )}
                     </div>
-                    <span className="text-xs text-gray-400 font-mono">{agent.step}</span>
-                  </div>
-                  <p className="text-xs text-gray-500 mb-2">{agent.task}</p>
-                  <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all ${
-                        agent.status === "active" ? "bg-green-500" :
-                        agent.status === "waiting" ? "bg-amber-500" :
-                        agent.status === "completed" ? "bg-blue-500" : "bg-gray-300"
-                      }`}
-                      style={{ width: `${agent.progress}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center gap-1.5">
+                        <Bot className="w-3.5 h-3.5 text-gray-400" />
+                        <span className="text-xs text-gray-500">{task.agents.join(", ")}</span>
+                      </div>
+                      <StatusBadge status={task.status} />
+                      <span className="text-xs text-gray-400 ml-auto">{task.deadline}</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${
+                          task.status === "active" ? "bg-green-500" : "bg-gray-400"
+                        }`}
+                        style={{ width: `${task.progress}%` }}
+                      />
+                    </div>
+                  </Wrapper>
+                );
+              })}
             </div>
           </div>
 
           {/* Activity Feed */}
-          <div className="bg-white rounded-xl border border-gray-100">
+          <div className="bg-white rounded-xl border border-gray-200">
             <div className="px-4 py-3 border-b border-gray-100">
               <h3 className="font-bold text-sm text-gray-800">Лента активности</h3>
             </div>
@@ -116,21 +183,41 @@ export default function HomeView({ userName, agents, activity, onNewTask, onNewA
           </div>
         </div>
 
+        {/* Quick Start Cards */}
+        <div className="grid grid-cols-4 gap-3">
+          {quickStart.map((item) => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.label}
+                onClick={() => handleQuickStart(item.action)}
+                className="bg-white rounded-xl p-4 text-left hover:bg-gray-50 transition-colors border border-gray-200 group"
+              >
+                <Icon className="w-6 h-6 text-gray-500 mb-2 group-hover:text-gray-700 transition-colors" />
+                <p className="font-semibold text-sm text-gray-800">{item.label}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{item.subtitle}</p>
+              </button>
+            );
+          })}
+        </div>
+
         {/* Industry Solutions */}
         <div>
           <h2 className="text-lg font-bold text-gray-900 mb-3">Отраслевые решения</h2>
           <div className="grid grid-cols-3 gap-3">
-            {solutions.map((s) => (
-              <button
-                key={s.title}
-                className={`relative overflow-hidden bg-gradient-to-br ${s.gradient} rounded-xl p-5 text-white text-left hover:scale-[1.02] transition-transform`}
-              >
-                <span className="text-3xl block mb-2">{s.icon}</span>
-                <p className="font-bold text-sm">{s.title}</p>
-                <p className="text-white/70 text-xs mt-1">Автоматизация с AI-агентами</p>
-                <div className="absolute -right-4 -bottom-4 text-6xl opacity-10">{s.icon}</div>
-              </button>
-            ))}
+            {solutions.map((s) => {
+              const Icon = s.icon;
+              return (
+                <button
+                  key={s.title}
+                  className={`${s.bg} rounded-xl p-5 text-white text-left hover:opacity-90 transition-opacity`}
+                >
+                  <Icon className="w-8 h-8 mb-2 opacity-80" />
+                  <p className="font-bold text-sm">{s.title}</p>
+                  <p className="text-white/60 text-xs mt-1">Автоматизация с AI-агентами</p>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

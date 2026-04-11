@@ -1,3 +1,4 @@
+import { ClipboardList } from "lucide-react";
 import type { TodoItem } from "../../../personalTypes";
 import { PRIORITY_COLORS } from "../../../personalTypes";
 
@@ -9,7 +10,9 @@ export default function TodoWidget({ todos }: Props) {
   return (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden max-w-lg animate-fade-in">
       <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-        <span className="text-sm font-semibold text-gray-700">📋 Мои задачи</span>
+        <span className="text-sm font-semibold text-gray-700 flex items-center gap-1.5">
+          <ClipboardList className="w-4 h-4 text-gray-500" /> Мои задачи
+        </span>
         <span className="text-xs text-gray-400">{todos.length} задач</span>
       </div>
       <div className="py-1">

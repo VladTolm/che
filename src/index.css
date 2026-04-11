@@ -2,7 +2,8 @@
 
 @theme {
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --color-content-bg: #f7f8fa;
+  --color-content-bg: #ffffff;
+  --color-accent: #22c55e;
 }
 
 @keyframes pulse-dot {

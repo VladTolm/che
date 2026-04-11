@@ -2,6 +2,7 @@ import type { Team, Agent } from "../../types";
 import StatusBadge from "../shared/StatusBadge";
 import ActivityIcon from "../shared/ActivityIcon";
 import { pluralize, relativeTime } from "../../utils/helpers";
+import { Users, Settings, UserPlus, Bot } from "lucide-react";
 
 interface Props {
   team: Team;
@@ -19,8 +20,8 @@ export default function TeamView({ team, allAgents, workspaceColors }: Props) {
       <div className="max-w-4xl mx-auto p-8 space-y-6">
         {/* Header */}
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl">
-            👥
+          <div className="w-12 h-12 rounded-xl bg-gray-900 flex items-center justify-center text-white">
+            <Users className="w-6 h-6" />
           </div>
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-gray-900">{team.name}</h1>
@@ -29,11 +30,13 @@ export default function TeamView({ team, allAgents, workspaceColors }: Props) {
             </p>
           </div>
           <div className="flex gap-2">
-            <button className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-gray-700 transition-colors">
-              ⚙️ Настройки
+            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-gray-700 transition-colors">
+              <Settings className="w-3.5 h-3.5" />
+              Настройки
             </button>
-            <button className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 rounded-lg text-sm text-white transition-colors">
-              + Пригласить
+            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 hover:bg-gray-800 rounded-lg text-sm text-white transition-colors">
+              <UserPlus className="w-3.5 h-3.5" />
+              Пригласить
             </button>
           </div>
         </div>
@@ -97,7 +100,7 @@ export default function TeamView({ team, allAgents, workspaceColors }: Props) {
             <div className="divide-y divide-gray-50">
               {sharedAgents.map((agent) => (
                 <div key={agent.id} className="px-4 py-3 flex items-center gap-3">
-                  <span className="text-lg">{agent.icon}</span>
+                  <Bot className="w-5 h-5 text-gray-500" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-gray-800">{agent.name}</span>

@@ -1,4 +1,4 @@
-import type { Agent, Workspace, Team, Task, ChatMessage, Notification, ActivityEntry } from "../types";
+import type { Agent, Workspace, Team, Task, ChatMessage, Notification, ActivityEntry, ExecutionLogGroup, DocTreeItem } from "../types";
 
 export const agents: Agent[] = [
   {
@@ -181,20 +181,87 @@ export const teams: Team[] = [
 
 export const currentTask: Task = {
   id: "task-main",
-  name: "Анализ и выбор поставщика серверного оборудования",
-  status: "active",
+  name: "Подготовить бриф к встрече с клиентом  ФОсагро",
+  status: "completed",
   agents: 3,
-  progress: 55,
+  progress: 100,
   steps: [
-    { id: 1, title: "Сбор данных", status: "completed" },
-    { id: 2, title: "Анализ предложений", status: "completed" },
-    { id: 3, title: "Сравнительная таблица", status: "active" },
-    { id: 4, title: "Рекомендации", status: "pending" },
-    { id: 5, title: "Согласование", status: "pending" },
+    { id: 1, title: "Найти клиента ФОсагро в CRM", status: "completed" },
+    { id: 2, title: "Собрать описание клиента (отрасль, размер, специфика)", status: "completed" },
+    { id: 3, title: "Получить историю активностей (встречи, звонки, письма)", status: "completed" },
+    { id: 4, title: "Получить текущие сделки и стадии", status: "completed" },
+    { id: 5, title: "Собрать контакты клиента (ФИО, должность, email, телефоны)", status: "completed" },
+    { id: 6, title: "Проверить запланированные активности", status: "completed" },
+    { id: 7, title: "Проверить договоры в ERP", status: "completed" },
+    { id: 8, title: "Собрать информацию о конкурентах", status: "completed" },
+    { id: 9, title: "Подготовить ключевые тезисы для встречи", status: "completed" },
+    { id: 10, title: "Сформировать итоговый бриф", status: "completed" },
   ],
   initiator: "Влад М.",
   deadline: "28 марта 2026",
 };
+
+export const executionLog: ExecutionLogGroup[] = [
+  {
+    id: "g1",
+    reasoningCount: 1,
+    actions: ["Задано 3 вопроса"],
+  },
+  {
+    id: "g2",
+    reasoningCount: 2,
+    actions: [
+      "Подключен навык: Giga CRM",
+      "Подключен навык: 1С ERP",
+      "Подключен навык: AI Почта",
+    ],
+  },
+  {
+    id: "g3",
+    reasoningCount: 1,
+    actions: ["Поиск клиента ФОсагро в CRM"],
+  },
+  {
+    id: "g4",
+    reasoningCount: 1,
+    actions: [
+      "Получение подробной информации о клиенте",
+      "Получение контактов клиента",
+      "История активностей по клиенту",
+      "Получение сделок по клиенту",
+    ],
+  },
+  {
+    id: "g5",
+    reasoningCount: 1,
+    actions: [
+      "Проверка запланированных активностей",
+      "Получение списка договоров из ERP",
+    ],
+  },
+  {
+    id: "g6",
+    reasoningCount: 1,
+    actions: ["Получение списка продуктов и цен"],
+  },
+  {
+    id: "g7",
+    reasoningCount: 3,
+    actions: [],
+  },
+];
+
+export const taskDocTree: DocTreeItem[] = [
+  {
+    name: "giga",
+    type: "folder",
+    children: [
+      { name: "voronka-prodazh.docx", type: "file", fileType: "docx" },
+      { name: "voronka-prodazh.md", type: "file", fileType: "md" },
+      { name: "voronka-prodazh.xlsx", type: "file", fileType: "xlsx" },
+    ],
+  },
+];
 
 export const chatMessages: ChatMessage[] = [
   { role: "user", text: "Проанализируй рынок поставщиков серверного оборудования в России. Нужно сравнить минимум 5 поставщиков по цене, срокам, гарантии и отзывам." },
@@ -227,6 +294,45 @@ export const activityFeed: ActivityEntry[] = [
   { id: "f5", type: "data", agent: "Коммуникатор", action: "отправил 8 приглашений на интервью", timestamp: "2026-03-24T12:30:00Z" },
   { id: "f6", type: "error", agent: "Ресёрчер", action: "ошибка подключения к HeadHunter API", timestamp: "2026-03-24T12:45:00Z" },
   { id: "f7", type: "data", agent: "Аналитик", action: "загрузил данные из SAP (23 записи)", timestamp: "2026-03-24T11:30:00Z" },
+];
+
+export const activeTasks = [
+  {
+    id: "task-main",
+    name: "Анализ и выбор поставщика серверного оборудования",
+    status: "active" as const,
+    progress: 55,
+    agents: ["Ресёрчер", "Аналитик", "Документалист"],
+    deadline: "28 марта",
+    navigable: true,
+  },
+  {
+    id: "task-devops",
+    name: "Скрининг Senior DevOps",
+    status: "active" as const,
+    progress: 75,
+    agents: ["HR-ассистент"],
+    deadline: "30 марта",
+    navigable: false,
+  },
+  {
+    id: "task-nda",
+    name: "Ревизия NDA",
+    status: "active" as const,
+    progress: 55,
+    agents: ["Юрист"],
+    deadline: "1 апреля",
+    navigable: false,
+  },
+  {
+    id: "task-contract",
+    name: "Подготовка договора поставки",
+    status: "waiting" as const,
+    progress: 45,
+    agents: ["Документалист"],
+    deadline: "2 апреля",
+    navigable: false,
+  },
 ];
 
 export const userName = "Влад";

@@ -1,3 +1,4 @@
+import { Mail } from "lucide-react";
 import type { MailItem } from "../../../personalTypes";
 
 interface Props {
@@ -8,7 +9,9 @@ export default function MailWidget({ mails }: Props) {
   return (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden max-w-lg animate-fade-in">
       <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-        <span className="text-sm font-semibold text-gray-700">📧 Почта — 3 требуют ответа</span>
+        <span className="text-sm font-semibold text-gray-700 flex items-center gap-1.5">
+          <Mail className="w-4 h-4 text-gray-500" /> Почта — 3 требуют ответа
+        </span>
         <span className="text-xs text-gray-400">12 новых</span>
       </div>
       {mails.map((m, i) => (
@@ -21,7 +24,7 @@ export default function MailWidget({ mails }: Props) {
             <span className="text-sm text-gray-600">{m.subject}</span>
           </div>
           {m.hasDraft && (
-            <button className="px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-medium cursor-pointer hover:bg-indigo-100 shrink-0">
+            <button className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium cursor-pointer hover:bg-gray-200 shrink-0">
               Черновик
             </button>
           )}

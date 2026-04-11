@@ -3,7 +3,7 @@ export type ChatDemoState =
   | "flight_plan"
   | "flight_running"
   | "flight_done"
-  | "workspace_view"
+
   | "expense_plan"
   | "expense_running"
   | "expense_done"
@@ -11,7 +11,7 @@ export type ChatDemoState =
   | "auto_create"
   | "auto_done";
 
-export type PersonalTab = "chat" | "overview" | "workspaces";
+export type PersonalTab = "chat" | "overview";
 
 export interface Thread {
   id: string;
@@ -22,7 +22,7 @@ export interface Thread {
 }
 
 export interface ContextConfig {
-  type: "workspace" | "execution" | "agent-settings" | "task-detail" | "team";
+  type: "execution" | "agent-settings" | "task-detail" | "team";
   title: string;
   data?: any;
 }
@@ -74,17 +74,6 @@ export interface ExecutionData {
   };
 }
 
-export interface PersonalWorkspace {
-  id: string;
-  name: string;
-  color: string;
-  desc: string;
-  count: number;
-  agents: number;
-  done: string;
-  tasks: { name: string; status: "active" | "waiting" | "completed"; progress: number }[];
-}
-
 export interface PersonalAgent {
   id: string;
   name: string;
@@ -107,7 +96,7 @@ export const DEMO_ORDER: ChatDemoState[] = [
   "flight_plan",
   "flight_running",
   "flight_done",
-  "workspace_view",
+
   "expense_plan",
   "expense_running",
   "expense_done",

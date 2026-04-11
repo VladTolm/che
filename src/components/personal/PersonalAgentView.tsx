@@ -1,10 +1,8 @@
 import { useState } from "react";
 import type { PersonalTab, ChatDemoState, ContextConfig } from "../../personalTypes";
-import { personalWorkspaces } from "../../data/personalMock";
 import PersonalAgentTopBar from "./PersonalAgentTopBar";
 import ChatView from "./ChatView";
 import OverviewView from "./OverviewView";
-import PersonalWorkspacesView from "./PersonalWorkspacesView";
 import ContextPanel from "./ContextPanel";
 
 export default function PersonalAgentView() {
@@ -15,7 +13,7 @@ export default function PersonalAgentView() {
 
   const handleToggleContext = () => {
     setContextPanel(
-      contextPanel ? null : { type: "workspace", title: "Закупки", data: { ws: personalWorkspaces[0] } }
+      contextPanel ? null : { type: "execution", title: "Контекст" }
     );
   };
 
@@ -42,12 +40,6 @@ export default function PersonalAgentView() {
           />
         )}
         {activeTab === "overview" && <OverviewView />}
-        {activeTab === "workspaces" && (
-          <PersonalWorkspacesView
-            workspaces={personalWorkspaces}
-            onSelectWorkspace={handleOpenContext}
-          />
-        )}
         {contextPanel && <ContextPanel config={contextPanel} onClose={() => setContextPanel(null)} />}
       </div>
     </div>

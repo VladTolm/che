@@ -1,4 +1,4 @@
-import type { Agent, Workspace, Team, Task, ChatMessage, Notification, ActivityEntry, ExecutionLogGroup, DocTreeItem } from "../types";
+import type { Agent, Team, Task, ChatMessage, Notification, ActivityEntry, ExecutionLogGroup, DocTreeItem } from "../types";
 
 export const agents: Agent[] = [
   {
@@ -69,81 +69,6 @@ export const agents: Agent[] = [
   },
 ];
 
-export const workspaces: Workspace[] = [
-  {
-    id: "ws-procurement",
-    name: "Закупки Q1",
-    color: "bg-orange-500",
-    count: 3,
-    desc: "Управление закупочными процессами первого квартала. Включает анализ поставщиков, согласование договоров и контроль бюджета.",
-    tasks: [
-      { id: "t1", name: "Анализ поставщиков", status: "active", agents: 2, progress: 60 },
-      { id: "t2", name: "Согласование договора", status: "waiting", agents: 1, progress: 30 },
-      { id: "t3", name: "Отчёт по бюджету", status: "completed", agents: 1, progress: 100 },
-    ],
-    agents: ["research", "analyst", "doc", "legal"],
-    systems: ["1С", "SAP", "Google Sheets", "Битрикс24"],
-    docs: [
-      { name: "Реестр поставщиков.xlsx", type: "xlsx", size: "2.4 MB" },
-      { name: "Договор №127.pdf", type: "pdf", size: "890 KB" },
-      { name: "Выгрузка цен.csv", type: "csv", size: "1.1 MB" },
-      { name: "ТЗ на поставку.docx", type: "docx", size: "340 KB" },
-    ],
-    activity: [
-      { id: "a1", type: "doc", agent: "Документалист", action: "создал черновик договора", timestamp: "2026-03-24T14:30:00Z" },
-      { id: "a2", type: "table", agent: "Аналитик", action: "обновил сравнительную таблицу", timestamp: "2026-03-24T14:15:00Z" },
-      { id: "a3", type: "approval", agent: "Ресёрчер", action: "запросил согласование отчёта", timestamp: "2026-03-24T13:45:00Z" },
-      { id: "a4", type: "complete", agent: "HR-ассистент", action: "завершил скрининг", timestamp: "2026-03-24T12:00:00Z" },
-      { id: "a5", type: "data", agent: "Аналитик", action: "загрузил данные из SAP", timestamp: "2026-03-24T11:30:00Z" },
-    ],
-    members: ["Влад М.", "Ирина К.", "Дмитрий С."],
-    budget: { tokens: 1_250_000, cost: 18.75, tasks_total: 12, tasks_done: 8 },
-  },
-  {
-    id: "ws-hr",
-    name: "Рекрутинг",
-    color: "bg-blue-500",
-    count: 2,
-    desc: "Набор сотрудников на открытые позиции. Автоматический скрининг резюме и координация интервью.",
-    tasks: [
-      { id: "t4", name: "Скрининг Senior DevOps", status: "active", agents: 1, progress: 75 },
-      { id: "t5", name: "Подготовка офферов", status: "waiting", agents: 1, progress: 40 },
-    ],
-    agents: ["hr", "comms"],
-    systems: ["HeadHunter API", "Google Calendar", "Slack"],
-    docs: [
-      { name: "Вакансии Q1.xlsx", type: "xlsx", size: "560 KB" },
-      { name: "Шаблон оффера.docx", type: "docx", size: "120 KB" },
-    ],
-    activity: [
-      { id: "a6", type: "complete", agent: "HR-ассистент", action: "завершил первичный скрининг (47 резюме)", timestamp: "2026-03-24T13:00:00Z" },
-      { id: "a7", type: "doc", agent: "Коммуникатор", action: "отправил приглашения на интервью", timestamp: "2026-03-24T12:30:00Z" },
-    ],
-    members: ["Ирина К.", "Ольга Н."],
-    budget: { tokens: 480_000, cost: 7.20, tasks_total: 6, tasks_done: 4 },
-  },
-  {
-    id: "ws-legal",
-    name: "Юр. отдел",
-    color: "bg-purple-500",
-    count: 1,
-    desc: "Правовое сопровождение и compliance. Проверка договоров, анализ рисков.",
-    tasks: [
-      { id: "t6", name: "Ревизия NDA", status: "active", agents: 1, progress: 55 },
-    ],
-    agents: ["legal", "doc"],
-    systems: ["Консультант+", "Гарант"],
-    docs: [
-      { name: "Шаблон NDA v3.pdf", type: "pdf", size: "210 KB" },
-    ],
-    activity: [
-      { id: "a8", type: "doc", agent: "Юрист", action: "начал ревизию шаблона NDA", timestamp: "2026-03-24T10:00:00Z" },
-    ],
-    members: ["Дмитрий С."],
-    budget: { tokens: 320_000, cost: 4.80, tasks_total: 4, tasks_done: 3 },
-  },
-];
-
 export const teams: Team[] = [
   {
     id: "team-ops",
@@ -154,7 +79,6 @@ export const teams: Team[] = [
       { name: "Дмитрий Сидоров", role: "Аналитик", email: "d.sidorov@company.ru", avatar: "Д", color: "from-orange-500 to-red-600", canLaunch: true, canApprove: false, canAdmin: false },
       { name: "Ольга Новикова", role: "Стажёр", email: "o.novikova@company.ru", avatar: "О", color: "from-pink-500 to-rose-600", canLaunch: false, canApprove: false, canAdmin: false },
     ],
-    workspaces: ["Закупки Q1", "Рекрутинг"],
     sharedAgents: ["research", "analyst", "doc"],
     activity: [
       { id: "ta1", type: "complete", agent: "Влад", action: "согласовал результаты анализа", timestamp: "2026-03-24T14:00:00Z" },
@@ -170,7 +94,6 @@ export const teams: Team[] = [
       { name: "Дмитрий Сидоров", role: "Руководитель", email: "d.sidorov@company.ru", avatar: "Д", color: "from-orange-500 to-red-600", canLaunch: true, canApprove: true, canAdmin: true },
       { name: "Елена Петрова", role: "Менеджер", email: "e.petrova@company.ru", avatar: "Е", color: "from-violet-500 to-purple-600", canLaunch: true, canApprove: true, canAdmin: false },
     ],
-    workspaces: ["Юр. отдел"],
     sharedAgents: ["legal", "doc"],
     activity: [
       { id: "ta5", type: "doc", agent: "Дмитрий", action: "обновил шаблон NDA", timestamp: "2026-03-24T10:30:00Z" },

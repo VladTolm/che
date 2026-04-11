@@ -7,10 +7,9 @@ import { Users, Settings, UserPlus, Bot } from "lucide-react";
 interface Props {
   team: Team;
   allAgents: Agent[];
-  workspaceColors: Record<string, string>;
 }
 
-export default function TeamView({ team, allAgents, workspaceColors }: Props) {
+export default function TeamView({ team, allAgents }: Props) {
   const memberCount = team.members.length;
   const memberWord = pluralize(memberCount, "участник", "участника", "участников");
   const sharedAgents = allAgents.filter((a) => team.sharedAgents.includes(a.id));
@@ -26,7 +25,7 @@ export default function TeamView({ team, allAgents, workspaceColors }: Props) {
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-gray-900">{team.name}</h1>
             <p className="text-sm text-gray-500 mt-1">
-              {memberCount} {memberWord} · Доступ к: {team.workspaces.join(", ")}
+              {memberCount} {memberWord}
             </p>
           </div>
           <div className="flex gap-2">
@@ -133,27 +132,6 @@ export default function TeamView({ team, allAgents, workspaceColors }: Props) {
           </div>
         </div>
 
-        {/* Workspace access */}
-        <div>
-          <h3 className="font-bold text-sm text-gray-800 mb-3">Доступ к пространствам</h3>
-          <div className="flex gap-3">
-            {team.workspaces.map((wsName) => (
-              <div key={wsName} className="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-lg ${workspaceColors[wsName] || "bg-gray-400"} flex items-center justify-center text-white text-xs font-bold`}>
-                  {wsName.charAt(0)}
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800">{wsName}</p>
-                  <p className="text-xs text-gray-400">Активных задач: 2</p>
-                </div>
-              </div>
-            ))}
-            <button className="border-2 border-dashed border-gray-200 rounded-xl p-4 flex items-center gap-2 text-gray-400 hover:text-gray-600 hover:border-gray-300 transition-colors">
-              <span>+</span>
-              <span className="text-sm">Добавить пространство</span>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );

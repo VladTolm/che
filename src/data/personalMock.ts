@@ -4,7 +4,6 @@ import type {
   TodoItem,
   Automation,
   ExecutionData,
-  PersonalWorkspace,
   PersonalAgent,
   Thread,
 } from "../personalTypes";
@@ -52,31 +51,6 @@ export const personalAgents: PersonalAgent[] = [
   { id: "hr", name: "HR-агент", status: "completed", task: "Скрининг кандидатов", icon: "👤", skills: ["CV Parsing", "Interview", "Scoring"] },
   { id: "legal", name: "Юрист-агент", status: "idle", task: "—", icon: "⚖️", skills: ["Contract Review", "Compliance", "Risk"] },
   { id: "comms", name: "Коммуникатор", status: "idle", task: "—", icon: "📧", skills: ["Email", "Summary", "Translation"] },
-];
-
-export const personalWorkspaces: PersonalWorkspace[] = [
-  {
-    id: "procurement", name: "Закупки", color: "bg-orange-500",
-    desc: "Поиск поставщиков, тендеры, сравнение цен", count: 3, agents: 3, done: "9/12",
-    tasks: [
-      { name: "Резюме по поставщикам", status: "active", progress: 60 },
-      { name: "Тендер Q2", status: "active", progress: 25 },
-      { name: "Обновление прайса", status: "waiting", progress: 80 },
-    ],
-  },
-  {
-    id: "marketing", name: "Маркетинг", color: "bg-blue-500",
-    desc: "Контент, аналитика, рассылки", count: 1, agents: 2, done: "4/6",
-    tasks: [{ name: "Отчёт по кампании", status: "active", progress: 45 }],
-  },
-  {
-    id: "hr", name: "HR отдел", color: "bg-purple-500",
-    desc: "Подбор, онбординг, оценка", count: 2, agents: 2, done: "7/8",
-    tasks: [
-      { name: "Скрининг кандидатов", status: "completed", progress: 100 },
-      { name: "Онбординг Дмитрия", status: "active", progress: 60 },
-    ],
-  },
 ];
 
 export const flightExec: ExecutionData = {

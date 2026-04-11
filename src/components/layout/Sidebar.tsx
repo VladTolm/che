@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Workspace, Team } from "../../types";
+import type { Team } from "../../types";
 import SidebarTooltip from "../shared/SidebarTooltip";
 import {
   Building2,
@@ -15,10 +15,8 @@ import {
 
 interface Props {
   activeNav: string;
-  workspaces: Workspace[];
   teams: Team[];
   onNav: (id: string) => void;
-  onSelectWS: (ws: Workspace) => void;
   onSelectTeam: (team: Team) => void;
 }
 
@@ -41,8 +39,7 @@ const configItems = [
   { id: "skills", icon: Wrench, label: "Skills" },
 ];
 
-export default function Sidebar({ activeNav, workspaces, teams, onNav, onSelectWS, onSelectTeam }: Props) {
-  const [wsTooltip, setWsTooltip] = useState(false);
+export default function Sidebar({ activeNav, teams, onNav, onSelectTeam }: Props) {
   const [teamTooltip, setTeamTooltip] = useState(false);
 
   function renderNavItem(item: { id: string; icon: React.ComponentType<{ className?: string }>; label: string; badge?: number; isGigabrain?: boolean }, style: "main" | "daily" | "config") {
@@ -106,44 +103,7 @@ export default function Sidebar({ activeNav, workspaces, teams, onNav, onSelectW
           {configItems.map((item) => renderNavItem(item, "config"))}
         </div>
 
-        {/* Group 4: Workspaces */}
-        <div className="relative border-t border-gray-200 mt-3 pt-3">
-          <div className="flex items-center justify-between px-3 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">Пространства</span>
-            <button
-              className="text-gray-400 hover:text-gray-600 text-xs cursor-pointer"
-              onMouseEnter={() => setWsTooltip(true)}
-              onMouseLeave={() => setWsTooltip(false)}
-            >
-              ?
-            </button>
-          </div>
-          <SidebarTooltip
-            text="Изолированные рабочие среды. У каждого пространства свои задачи, агенты, документы и подключённые системы."
-            visible={wsTooltip}
-          />
-          {workspaces.map((ws) => (
-            <button
-              key={ws.id}
-              onClick={() => onSelectWS(ws)}
-              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs transition-colors cursor-pointer ${
-                activeNav === ws.id
-                  ? "bg-gray-100 text-gray-900"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-              }`}
-            >
-              <span className={`w-2 h-2 rounded-full ${ws.color}`} />
-              <span className="flex-1 text-left truncate">{ws.name}</span>
-              <span className="text-xs text-gray-400">{ws.count}</span>
-            </button>
-          ))}
-          <button className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
-            <span>+</span>
-            <span>Добавить</span>
-          </button>
-        </div>
-
-        {/* Group 5: Teams */}
+        {/* Group 4: Teams */}
         <div className="relative border-t border-gray-200 mt-3 pt-3">
           <div className="flex items-center justify-between px-3 mb-2">
             <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">Команды</span>

@@ -10,31 +10,10 @@ export interface Agent {
   skills: string[];
 }
 
-export interface Workspace {
-  id: string;
-  name: string;
-  color: string;
-  count: number;
-  desc: string;
-  tasks: WorkspaceTask[];
-  agents: string[];
-  systems: string[];
-  docs: WorkspaceDoc[];
-  activity: ActivityEntry[];
-  members: string[];
-  budget: {
-    tokens: number;
-    cost: number;
-    tasks_total: number;
-    tasks_done: number;
-  };
-}
-
 export interface Team {
   id: string;
   name: string;
   members: TeamMember[];
-  workspaces: string[];
   sharedAgents: string[];
   activity: ActivityEntry[];
 }
@@ -59,27 +38,12 @@ export interface Task {
   steps: TaskStep[];
   initiator: string;
   deadline: string;
-  workspaceId?: string;
 }
 
 export interface TaskStep {
   id: number;
   title: string;
   status: "completed" | "active" | "pending";
-}
-
-export interface WorkspaceTask {
-  id: string;
-  name: string;
-  status: "active" | "waiting" | "completed";
-  agents: number;
-  progress: number;
-}
-
-export interface WorkspaceDoc {
-  name: string;
-  type: "xlsx" | "pdf" | "csv" | "docx";
-  size: string;
 }
 
 export interface ActivityEntry {

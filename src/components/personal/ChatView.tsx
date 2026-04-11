@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Plane, Package, Receipt, Ban, RefreshCw, Send, CheckCircle, ArrowRight, AlertTriangle } from "lucide-react";
+import { Plane, Receipt, Ban, RefreshCw, Send, CheckCircle, ArrowRight, AlertTriangle } from "lucide-react";
 import type { ChatDemoState, ContextConfig } from "../../personalTypes";
 import { DEMO_ORDER } from "../../personalTypes";
 import {
@@ -7,7 +7,6 @@ import {
   mails,
   todos,
   automations,
-  personalWorkspaces,
   flightExec,
   flightExecRunning,
   expenseExecRunning,
@@ -22,7 +21,6 @@ import MailWidget from "./widgets/MailWidget";
 import TodoWidget from "./widgets/TodoWidget";
 import ActiveExecutionsWidget from "./widgets/ActiveExecutionsWidget";
 import AutomationsWidget from "./widgets/AutomationsWidget";
-import WorkspaceInlineWidget from "./widgets/WorkspaceInlineWidget";
 import ExecutionCard from "./cards/ExecutionCard";
 import ConfirmCard from "./cards/ConfirmCard";
 import BlockedCard from "./cards/BlockedCard";
@@ -59,7 +57,6 @@ export default function ChatView({ chatState, setChatState, input, setInput, onO
     if (!input.trim()) return;
     const txt = input.toLowerCase();
     if (txt.includes("рейс") || txt.includes("flight")) setChatState("flight_plan");
-    else if (txt.includes("закупк") || txt.includes("пространств")) setChatState("workspace_view");
     else if (txt.includes("чек") || txt.includes("expense")) setChatState("expense_plan");
     else if (txt.includes("отправ")) setChatState("blocked");
     else if (txt.includes("автоматиз") || txt.includes("каждое утро")) setChatState("auto_create");
@@ -69,14 +66,12 @@ export default function ChatView({ chatState, setChatState, input, setInput, onO
   const handleQuickAction = (action: string) => {
     const msgMap: Record<string, string> = {
       flights: "Найди рейсы Москва–Шанхай, 1-3 апреля, до 30000₽",
-      workspace: "Покажи пространство Закупки",
       expense: "Собери чеки из почты за март",
       blocked: "Отправь Foxconn наш прайс",
       auto: "Каждое утро в 7:30 — курс, погода, задачи",
     };
     const stateMap: Record<string, ChatDemoState> = {
       flights: "flight_plan",
-      workspace: "workspace_view",
       expense: "expense_plan",
       blocked: "blocked",
       auto: "auto_create",
@@ -155,26 +150,6 @@ export default function ChatView({ chatState, setChatState, input, setInput, onO
                   </button>
                 </AgentMsg>
               )}
-            </>
-          )}
-
-          {/* Workspace demo */}
-          {stateReached(chatState, "workspace_view") && (
-            <>
-              <UserMsg>Покажи пространство Закупки</UserMsg>
-              <AgentMsg time="14:35">
-                <div className="text-sm text-gray-700">Вот текущий статус:</div>
-                <WorkspaceInlineWidget
-                  workspace={personalWorkspaces[0]}
-                  onOpen={() =>
-                    onOpenContext({
-                      type: "workspace",
-                      title: "Закупки",
-                      data: { ws: personalWorkspaces[0] },
-                    })
-                  }
-                />
-              </AgentMsg>
             </>
           )}
 
@@ -319,7 +294,6 @@ export default function ChatView({ chatState, setChatState, input, setInput, onO
           <div className="flex gap-2 mt-2.5 flex-wrap">
             {[
               { id: "flights", icon: <Plane className="w-3.5 h-3.5" />, label: "Рейсы" },
-              { id: "workspace", icon: <Package className="w-3.5 h-3.5" />, label: "Пространство" },
               { id: "expense", icon: <Receipt className="w-3.5 h-3.5" />, label: "Чеки" },
               { id: "blocked", icon: <Ban className="w-3.5 h-3.5" />, label: "Блокировка" },
               { id: "auto", icon: <RefreshCw className="w-3.5 h-3.5" />, label: "Автоматизация" },

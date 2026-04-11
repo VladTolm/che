@@ -1,11 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import type { Notification, Workspace, Team } from "../../types";
+import type { Notification, Team } from "../../types";
 import { relativeTime } from "../../utils/helpers";
 import { Bot, Plus, Bell, AlertTriangle, CheckCircle, XCircle, MessageSquare } from "lucide-react";
 
 interface Props {
   view: "home" | "task";
-  selectedWS: Workspace | null;
   selectedTeam: Team | null;
   notifications: Notification[];
   onNavigate: (view: "home" | "task") => void;
@@ -21,14 +20,14 @@ const notifIcons: Record<string, React.ReactNode> = {
   mention: <MessageSquare className="w-4 h-4 text-gray-500" />,
 };
 
-export default function TopBar({ view, selectedWS, selectedTeam, notifications, onNavigate, onNewTask, onNewAITeam, onMarkAllRead }: Props) {
+export default function TopBar({ view, selectedTeam, notifications, onNavigate, onNewTask, onNewAITeam, onMarkAllRead }: Props) {
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [showNotifs, setShowNotifs] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
-  const breadcrumb = selectedWS?.name || selectedTeam?.name;
+  const breadcrumb = selectedTeam?.name;
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -47,7 +46,7 @@ export default function TopBar({ view, selectedWS, selectedTeam, notifications, 
         <button
           onClick={() => onNavigate("home")}
           className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-            view === "home" && !selectedWS && !selectedTeam
+            view === "home" && !selectedTeam
               ? "bg-gray-100 text-gray-900"
               : "text-gray-500 hover:text-gray-700"
           }`}
@@ -57,7 +56,7 @@ export default function TopBar({ view, selectedWS, selectedTeam, notifications, 
         <button
           onClick={() => onNavigate("task")}
           className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-            view === "task" && !selectedWS && !selectedTeam
+            view === "task" && !selectedTeam
               ? "bg-gray-100 text-gray-900"
               : "text-gray-500 hover:text-gray-700"
           }`}

@@ -1,30 +1,24 @@
 import { useState } from "react";
-import type { Workspace, Team } from "./types";
-import { agents, workspaces, teams, currentTask, chatMessages, executionLog, taskDocTree, notifications as initialNotifications, activityFeed, userName } from "./data/mock";
+import type { Team } from "./types";
+import { agents, teams, currentTask, chatMessages, executionLog, taskDocTree, notifications as initialNotifications, activityFeed, userName } from "./data/mock";
 import Sidebar from "./components/layout/Sidebar";
 import TopBar from "./components/layout/TopBar";
 import HomeView from "./components/views/HomeView";
 import TaskView from "./components/views/TaskView";
-import WorkspaceView from "./components/views/WorkspaceView";
 import TeamView from "./components/views/TeamView";
 import NewTaskModal from "./components/modals/NewTaskModal";
 import CreateAITeamModal from "./components/modals/CreateAITeamModal";
 import PersonalAgentView from "./components/personal/PersonalAgentView";
 
-const workspaceColorMap: Record<string, string> = {};
-workspaces.forEach((ws) => { workspaceColorMap[ws.name] = ws.color; });
-
 export default function App() {
   const [activeNav, setActiveNav] = useState("company");
   const [view, setView] = useState<"home" | "task">("home");
-  const [selectedWS, setSelectedWS] = useState<Workspace | null>(null);
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [showNewTask, setShowNewTask] = useState(false);
   const [showAITeam, setShowAITeam] = useState(false);
   const [notifications, setNotifications] = useState(initialNotifications);
 
   function handleNav(id: string) {
-    setSelectedWS(null);
     setSelectedTeam(null);
     setActiveNav(id);
     if (id === "company") setView("home");
@@ -32,20 +26,12 @@ export default function App() {
     else setView("home");
   }
 
-  function handleSelectWS(ws: Workspace) {
-    setSelectedWS(ws);
-    setSelectedTeam(null);
-    setActiveNav(ws.id);
-  }
-
   function handleSelectTeam(team: Team) {
     setSelectedTeam(team);
-    setSelectedWS(null);
     setActiveNav(team.id);
   }
 
   function handleNavigate(v: "home" | "task") {
-    setSelectedWS(null);
     setSelectedTeam(null);
     setView(v);
     setActiveNav(v === "home" ? "company" : "tasks");
@@ -59,11 +45,8 @@ export default function App() {
     if (activeNav === "gigabrain") {
       return <PersonalAgentView />;
     }
-    if (selectedWS) {
-      return <WorkspaceView ws={selectedWS} allAgents={agents} onNewTask={() => setShowNewTask(true)} />;
-    }
     if (selectedTeam) {
-      return <TeamView team={selectedTeam} allAgents={agents} workspaceColors={workspaceColorMap} />;
+      return <TeamView team={selectedTeam} allAgents={agents} />;
     }
     if (view === "home") {
       return (
@@ -91,17 +74,14 @@ export default function App() {
     <div className="flex h-full overflow-hidden">
       <Sidebar
         activeNav={activeNav}
-        workspaces={workspaces}
         teams={teams}
         onNav={handleNav}
-        onSelectWS={handleSelectWS}
         onSelectTeam={handleSelectTeam}
       />
       <div className="flex-1 flex flex-col min-w-0 bg-content-bg">
         {activeNav !== "gigabrain" && (
           <TopBar
             view={view}
-            selectedWS={selectedWS}
             selectedTeam={selectedTeam}
             notifications={notifications}
             onNavigate={handleNavigate}

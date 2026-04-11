@@ -1,4 +1,4 @@
-import { MessageSquare, BarChart3, Package, ClipboardList, X, Bot } from "lucide-react";
+import { MessageSquare, BarChart3, ClipboardList, X, Bot } from "lucide-react";
 import type { PersonalTab } from "../../personalTypes";
 
 interface Props {
@@ -11,7 +11,6 @@ interface Props {
 const tabs: { id: PersonalTab; icon: React.ReactNode; label: string }[] = [
   { id: "chat", icon: <MessageSquare className="w-3.5 h-3.5" />, label: "Чат" },
   { id: "overview", icon: <BarChart3 className="w-3.5 h-3.5" />, label: "Обзор" },
-  { id: "workspaces", icon: <Package className="w-3.5 h-3.5" />, label: "Пространства" },
 ];
 
 export default function PersonalAgentTopBar({ activeTab, onTabChange, contextOpen, onToggleContext }: Props) {

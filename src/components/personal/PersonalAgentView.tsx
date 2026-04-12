@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type { PersonalTab, ChatDemoState, ContextConfig } from "../../personalTypes";
 import PersonalAgentTopBar from "./PersonalAgentTopBar";
 import ChatView from "./ChatView";
 import OverviewView from "./OverviewView";
 import ContextPanel from "./ContextPanel";
+import Splitter from "../shared/Splitter";
 
 export default function PersonalAgentView() {
   const [activeTab, setActiveTab] = useState<PersonalTab>("chat");
   const [chatState, setChatState] = useState<ChatDemoState>("morning_brief");
   const [contextPanel, setContextPanel] = useState<ContextConfig | null>(null);
   const [input, setInput] = useState("");
+  const [contextWidth, setContextWidth] = useState(320);
+
+  const handleContextResize = useCallback((delta: number) => {
+    setContextWidth((w) => Math.min(500, Math.max(200, w - delta)));
+  }, []);
 
   const handleToggleContext = () => {
     setContextPanel(
@@ -40,7 +46,12 @@ export default function PersonalAgentView() {
           />
         )}
         {activeTab === "overview" && <OverviewView />}
-        {contextPanel && <ContextPanel config={contextPanel} onClose={() => setContextPanel(null)} />}
+        {contextPanel && (
+          <>
+            <Splitter onResize={handleContextResize} />
+            <ContextPanel config={contextPanel} onClose={() => setContextPanel(null)} width={contextWidth} />
+          </>
+        )}
       </div>
     </div>
   );

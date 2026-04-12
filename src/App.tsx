@@ -197,11 +197,21 @@ export default function App() {
     if (selectedWorkspace) {
       // Active session view
       if (activeSessionId) {
+        const wsWaitingCount = waitingCounts[selectedWorkspace.id] ?? 0;
         return (
           <WorkspaceView
             workspace={selectedWorkspace}
             sessionId={activeSessionId}
-            onBack={() => setActiveSessionId(null)}
+            activeSection={workspaceSubSection}
+            waitingCount={wsWaitingCount}
+            onChangeSection={(sub) => {
+              setActiveSessionId(null);
+              handleChangeWorkspaceSection(sub);
+            }}
+            onBack={() => {
+              setActiveSessionId(null);
+              setWorkspaceSubSection("history");
+            }}
             onConfigureAgent={openAgentEditor}
           />
         );

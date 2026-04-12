@@ -1,5 +1,5 @@
 import { FileText } from "lucide-react";
-import type { WorkspaceChatMessage, WorkspaceSkill, SourceDocument, WorkspaceAgent, WsWaitingReason } from "../../../workspaceTypes";
+import type { WorkspaceChatMessage, WorkspaceSkill, SourceDocument, WorkspaceAgent, WsWaitingReason, WsArtifact } from "../../../workspaceTypes";
 import WorkspaceChatInput from "./WorkspaceChatInput";
 import WaitingCard from "./WaitingCard";
 
@@ -12,14 +12,20 @@ interface Props {
   skills: WorkspaceSkill[];
   selectedDocs: SourceDocument[];
   workspaceName: string;
+  artifacts?: WsArtifact[];
   onOpenArtifact: (artifactId: string) => void;
   waitingReason?: WsWaitingReason | null;
   onContinue?: () => void;
   onEndSession?: () => void;
 }
 
-export default function WorkspaceChatView({ messages, input, onInputChange, onSend, activeAgent, skills, selectedDocs, workspaceName, onOpenArtifact, waitingReason, onContinue, onEndSession }: Props) {
+export default function WorkspaceChatView({ messages, input, onInputChange, onSend, activeAgent, skills, selectedDocs, workspaceName, artifacts, onOpenArtifact, waitingReason, onContinue, onEndSession }: Props) {
   const hasContext = selectedDocs.length > 0;
+
+  function getArtifactName(artifactId: string): string {
+    const found = artifacts?.find((a) => a.id === artifactId);
+    return found?.name ?? "Артефакт";
+  }
 
   return (
     <div className="flex-1 flex flex-col min-w-0 min-h-0">
@@ -76,7 +82,7 @@ export default function WorkspaceChatView({ messages, input, onInputChange, onSe
                           <FileText className="w-4 h-4 text-gray-500" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-xs font-medium text-gray-800">Сводка_требований_ФосАгро_Q2</p>
+                          <p className="text-xs font-medium text-gray-800 truncate">{getArtifactName(msg.artifactId)}</p>
                           <p className="text-[10px] text-gray-400">Открыть артефакт</p>
                         </div>
                       </button>

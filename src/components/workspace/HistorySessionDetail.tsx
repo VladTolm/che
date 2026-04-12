@@ -9,6 +9,7 @@ interface Props {
   onOpenSession: (id: string) => void;
   onTakeSession: (id: string) => void;
   onArchiveSession?: (id: string) => void;
+  width?: number;
 }
 
 const statusLabels: Record<SessionStatus, string> = {
@@ -25,13 +26,13 @@ const statusColors: Record<SessionStatus, string> = {
   archived: "text-gray-400",
 };
 
-export default function HistorySessionDetail({ session, currentUserId, onOpenSession, onTakeSession, onArchiveSession }: Props) {
+export default function HistorySessionDetail({ session, currentUserId, onOpenSession, onTakeSession, onArchiveSession, width = 384 }: Props) {
   const [showMenu, setShowMenu] = useState(false);
   const [showFullChat, setShowFullChat] = useState(false);
 
   if (!session) {
     return (
-      <div className="w-96 shrink-0 flex items-center justify-center text-sm text-gray-400">
+      <div className="shrink-0 flex items-center justify-center text-sm text-gray-400" style={{ width }}>
         Выберите сессию для просмотра
       </div>
     );
@@ -55,7 +56,7 @@ export default function HistorySessionDetail({ session, currentUserId, onOpenSes
   }
 
   return (
-    <div className="w-96 shrink-0 overflow-y-auto bg-white border-l border-gray-100">
+    <div className="shrink-0 overflow-y-auto bg-white" style={{ width }}>
       <div className="max-w-2xl mx-auto p-6">
         {/* Header */}
         <div className="flex items-start justify-between mb-1">

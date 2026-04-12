@@ -4,11 +4,12 @@ import type { ContextConfig } from "../../personalTypes";
 interface Props {
   config: ContextConfig;
   onClose: () => void;
+  width?: number;
 }
 
-export default function ContextPanel({ config, onClose }: Props) {
+export default function ContextPanel({ config, onClose, width = 320 }: Props) {
   return (
-    <div className="w-80 border-l border-gray-200 bg-white flex flex-col shrink-0 animate-slide-right overflow-hidden">
+    <div className="bg-white flex flex-col shrink-0 animate-slide-right overflow-hidden" style={{ width, minWidth: width, maxWidth: width }}>
       <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between shrink-0">
         <span className="text-sm font-semibold text-gray-800">{config.title}</span>
         <button onClick={onClose} className="text-gray-400 hover:text-gray-600 cursor-pointer">

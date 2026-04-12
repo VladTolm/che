@@ -46,7 +46,7 @@ export default function HistorySessionList({ sessions, filters, onFiltersChange,
   const hasActiveFilters = filters.search || filters.statuses.length > 0 || filters.agentId || filters.participantId || filters.dateFrom || filters.dateTo;
 
   return (
-    <div className="flex-1 border-r border-gray-200 flex flex-col min-w-0 bg-white">
+    <div className="flex-1 flex flex-col min-w-0 bg-white">
       {/* Search */}
       <div className="p-3 border-b border-gray-100">
         <div className="relative">

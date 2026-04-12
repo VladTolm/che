@@ -1,10 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import type { Workspace, HistorySession, HistoryFilters, WorkspaceSubSection } from "../../workspaceTypes";
 import { historySessions as allSessions } from "../../data/workspaceMock";
 import WorkspaceTabBar from "./WorkspaceTabBar";
 import HistorySessionList from "./HistorySessionList";
 import HistorySessionDetail from "./HistorySessionDetail";
 import AcceptSessionModal from "./AcceptSessionModal";
+import Splitter from "../shared/Splitter";
 
 interface Props {
   workspace: Workspace;
@@ -26,6 +27,11 @@ export default function HistoryView({ workspace, activeSection, waitingCount, on
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
   const [acceptSession, setAcceptSession] = useState<HistorySession | null>(null);
   const [sessions, setSessions] = useState<HistorySession[]>(allSessions);
+  const [detailWidth, setDetailWidth] = useState(384);
+
+  const handleDetailResize = useCallback((delta: number) => {
+    setDetailWidth((w) => Math.min(600, Math.max(250, w - delta)));
+  }, []);
 
   const filteredSessions = useMemo(() => {
     let result = sessions;
@@ -89,12 +95,14 @@ export default function HistoryView({ workspace, activeSection, waitingCount, on
           onSelectSession={setSelectedSessionId}
           onTakeSession={handleTakeSession}
         />
+        <Splitter onResize={handleDetailResize} />
         <HistorySessionDetail
           session={selectedSession}
           currentUserId="user-1"
           onOpenSession={onOpenSession}
           onTakeSession={handleTakeSession}
           onArchiveSession={handleArchiveSession}
+          width={detailWidth}
         />
       </div>
 

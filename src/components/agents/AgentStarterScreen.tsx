@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { ArrowLeft, Search, Send, Sparkles } from "lucide-react";
+import Splitter from "../shared/Splitter";
 import type { AgentTemplate } from "../../agentEditorTypes";
 import { agentTemplates } from "../../data/agentEditorMock";
 
@@ -36,8 +37,13 @@ export default function AgentStarterScreen({
   const [input, setInput] = useState("");
   const [search, setSearch] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [templateWidth, setTemplateWidth] = useState(400);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleTemplateResize = useCallback((delta: number) => {
+    setTemplateWidth((w) => Math.min(600, Math.max(250, w - delta)));
+  }, []);
 
   const filteredTemplates = agentTemplates.filter(
     (t) =>
@@ -96,7 +102,7 @@ export default function AgentStarterScreen({
       {/* Main content: chat left + templates right */}
       <div className="flex-1 flex overflow-hidden min-w-0 min-h-0">
         {/* Left: Builder agent chat */}
-        <div className="flex-[6] flex flex-col min-w-0 min-h-0 border-r border-gray-100">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0">
           {/* Chat messages */}
           <div className="flex-1 overflow-y-auto px-6 py-6 min-h-0">
             <div className="max-w-xl mx-auto space-y-4">
@@ -175,8 +181,9 @@ export default function AgentStarterScreen({
           </div>
         </div>
 
+        <Splitter onResize={handleTemplateResize} />
         {/* Right: Templates */}
-        <div className="flex-[4] flex flex-col min-w-0 min-h-0 bg-gray-50/50">
+        <div className="flex flex-col min-w-0 min-h-0 bg-gray-50/50 shrink-0" style={{ width: templateWidth }}>
           <div className="px-5 pt-5 pb-3 shrink-0">
             <h3 className="text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-3">
               Или выберите шаблон

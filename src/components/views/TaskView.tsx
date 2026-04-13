@@ -1,12 +1,10 @@
 import { useState, useMemo } from "react";
 import type { Task, ExecutionLogGroup, DocTreeItem } from "../../types";
 import StepStatus from "../shared/StepStatus";
-import FileIcon from "../shared/FileIcon";
 import {
   Send,
   ChevronRight,
   ChevronDown,
-  Search,
   X,
   Folder,
   FolderOpen,

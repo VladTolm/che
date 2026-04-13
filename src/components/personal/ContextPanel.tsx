@@ -1,4 +1,4 @@
-import { X, Calendar, Mail, BarChart3, MessageSquare, ClipboardList, Pencil, FileText } from "lucide-react";
+import { X, Calendar, Mail, MessageSquare, ClipboardList, Pencil, FileText } from "lucide-react";
 import type { ContextConfig } from "../../personalTypes";
 
 interface Props {

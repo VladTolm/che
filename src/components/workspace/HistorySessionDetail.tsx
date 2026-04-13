@@ -26,7 +26,7 @@ const statusColors: Record<SessionStatus, string> = {
   archived: "text-gray-400",
 };
 
-export default function HistorySessionDetail({ session, currentUserId, onOpenSession, onTakeSession, onArchiveSession, width = 384 }: Props) {
+export default function HistorySessionDetail({ session, currentUserId: _currentUserId, onOpenSession, onTakeSession, onArchiveSession, width = 384 }: Props) {
   const [showMenu, setShowMenu] = useState(false);
   const [showFullChat, setShowFullChat] = useState(false);
 
@@ -43,15 +43,14 @@ export default function HistorySessionDetail({ session, currentUserId, onOpenSes
   const createdStr = createdDate.toLocaleDateString("ru", dateFormat);
   const completedStr = session.completedAt ? new Date(session.completedAt).toLocaleDateString("ru", dateFormat) : null;
 
-  const isOwner = session.owner === "Влад Иванов"; // simplified check
   const isWaiting = session.status === "waiting";
   const isCompleted = session.status === "completed";
 
   function handleOpen() {
-    if (isWaiting && !session.owner) {
-      onTakeSession(session.id);
+    if (isWaiting && !session!.owner) {
+      onTakeSession(session!.id);
     } else {
-      onOpenSession(session.id);
+      onOpenSession(session!.id);
     }
   }
 

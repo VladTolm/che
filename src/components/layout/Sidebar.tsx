@@ -1,39 +1,42 @@
-import { useState } from "react";
-import type { Team } from "../../types";
 import type { Workspace } from "../../workspaceTypes";
-import SidebarTooltip from "../shared/SidebarTooltip";
 import {
   Building2,
-  Brain,
-  Users,
+  PlusCircle,
+  Clock,
+  Newspaper,
+  CalendarDays,
+  Video,
   Settings,
   Menu,
 } from "lucide-react";
 
 interface Props {
   activeNav: string;
-  teams: Team[];
   workspaces: Workspace[];
   collapsed: boolean;
   waitingCounts: Record<string, number>;
   onToggleCollapse: () => void;
   onNav: (id: string) => void;
-  onSelectTeam: (team: Team) => void;
   onSelectWorkspace: (ws: Workspace) => void;
 }
 
-/* Group 1: Main modes */
-const mainModes = [
-  { id: "company", icon: Building2, label: "Компания" },
-  { id: "gigabrain", icon: Brain, label: "ГигаМозг", badge: 3, isGigabrain: true },
+/* Company sub-items */
+const companyItems = [
+  { id: "new-task", icon: PlusCircle, label: "Новая задача" },
+  { id: "history", icon: Clock, label: "История" },
 ];
 
-export default function Sidebar({ activeNav, teams, workspaces, collapsed, waitingCounts, onToggleCollapse, onNav, onSelectTeam, onSelectWorkspace }: Props) {
-  const [teamTooltip, setTeamTooltip] = useState(false);
+/* Agent items */
+const agentItems = [
+  { id: "digest", icon: Newspaper, label: "Дайджест" },
+  { id: "calendar", icon: CalendarDays, label: "Календарь" },
+  { id: "meetings", icon: Video, label: "Встречи" },
+];
 
-  function renderNavItem(item: { id: string; icon: React.ComponentType<{ className?: string }>; label: string; badge?: number; isGigabrain?: boolean }) {
+export default function Sidebar({ activeNav, workspaces, collapsed, waitingCounts, onToggleCollapse, onNav, onSelectWorkspace }: Props) {
+
+  function renderNavItem(item: { id: string; icon: React.ComponentType<{ className?: string }>; label: string }) {
     const isActive = activeNav === item.id;
-    const isGigabrain = item.isGigabrain;
     const Icon = item.icon;
 
     const cls = isActive
@@ -47,22 +50,8 @@ export default function Sidebar({ activeNav, teams, workspaces, collapsed, waiti
         title={collapsed ? item.label : undefined}
         className={`w-full flex items-center ${collapsed ? "justify-center" : "gap-3"} px-3 py-2.5 rounded-lg text-xs transition-colors cursor-pointer ${cls}`}
       >
-        <span className="relative shrink-0">
-          <Icon className="w-5 h-5" />
-          {isGigabrain && (
-            <span className="absolute -top-0.5 -right-1 w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse-dot" />
-          )}
-        </span>
-        {!collapsed && (
-          <>
-            <span className="flex-1 text-left">{item.label}</span>
-            {item.badge != null && (
-              <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${isGigabrain ? "bg-green-500 text-white" : "bg-gray-100 text-gray-600"}`}>
-                {item.badge}
-              </span>
-            )}
-          </>
-        )}
+        <Icon className="w-5 h-5 shrink-0" />
+        {!collapsed && <span className="flex-1 text-left">{item.label}</span>}
       </button>
     );
   }
@@ -89,12 +78,30 @@ export default function Sidebar({ activeNav, teams, workspaces, collapsed, waiti
 
       {/* Navigation */}
       <nav className={`flex-1 overflow-y-auto ${collapsed ? "px-1.5" : "px-3"} py-3`}>
-        {/* Group 1: Main modes */}
+        {/* Компания */}
+        {!collapsed && (
+          <div className="flex items-center px-3 mb-2">
+            <Building2 className="w-4 h-4 text-gray-400 mr-2" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">Компания</span>
+          </div>
+        )}
         <div className="space-y-0.5">
-          {mainModes.map((item) => renderNavItem(item))}
+          {companyItems.map((item) => renderNavItem(item))}
         </div>
 
-        {/* Workspaces — flat list, no sub-items */}
+        {/* Агенты */}
+        <div className="border-t border-gray-200 mt-3 pt-3">
+          {!collapsed && (
+            <div className="flex items-center justify-between px-3 mb-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">Агенты</span>
+            </div>
+          )}
+          <div className="space-y-0.5">
+            {agentItems.map((item) => renderNavItem(item))}
+          </div>
+        </div>
+
+        {/* Пространства */}
         <div className="border-t border-gray-200 mt-3 pt-3">
           {!collapsed && (
             <div className="flex items-center justify-between px-3 mb-2">
@@ -131,48 +138,6 @@ export default function Sidebar({ activeNav, teams, workspaces, collapsed, waiti
               </button>
             );
           })}
-        </div>
-
-        {/* Teams */}
-        <div className="relative border-t border-gray-200 mt-3 pt-3">
-          {!collapsed && (
-            <>
-              <div className="flex items-center justify-between px-3 mb-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">Команды</span>
-                <button
-                  className="text-gray-400 hover:text-gray-600 text-xs cursor-pointer"
-                  onMouseEnter={() => setTeamTooltip(true)}
-                  onMouseLeave={() => setTeamTooltip(false)}
-                >
-                  ?
-                </button>
-              </div>
-              <SidebarTooltip
-                text="Группы сотрудников с общими правами доступа. Управляйте кто может запускать задачи, согласовывать и администрировать."
-                visible={teamTooltip}
-              />
-            </>
-          )}
-          {teams.map((team) => (
-            <button
-              key={team.id}
-              onClick={() => onSelectTeam(team)}
-              title={collapsed ? team.name : undefined}
-              className={`w-full flex items-center ${collapsed ? "justify-center" : "gap-2.5"} px-3 py-2 rounded-lg text-xs transition-colors cursor-pointer ${
-                activeNav === team.id
-                  ? "bg-gray-100 text-gray-900"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-              }`}
-            >
-              <Users className="w-4 h-4 shrink-0" />
-              {!collapsed && (
-                <>
-                  <span className="flex-1 text-left truncate">{team.name}</span>
-                  <span className="text-xs text-gray-400">{team.members.length}</span>
-                </>
-              )}
-            </button>
-          ))}
         </div>
 
         {/* Settings */}

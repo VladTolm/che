@@ -10,7 +10,7 @@ interface Props {
   onToggleRight: () => void;
 }
 
-export default function WorkspaceTopBar({ workspace, sessionName, activeAgent, onBack, rightOpen, onToggleRight }: Props) {
+export default function WorkspaceTopBar({ sessionName, activeAgent, onBack, rightOpen, onToggleRight }: Props) {
   return (
     <div className="h-10 bg-white border-b border-gray-100 px-4 flex items-center justify-between shrink-0">
       {/* Left: back + session info */}

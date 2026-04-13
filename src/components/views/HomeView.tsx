@@ -35,11 +35,10 @@ const quickStart = [
   { icon: Sparkles, label: "Придумай свою", subtitle: "Своя автоматизация", action: "custom" as const },
 ];
 
-export default function HomeView({ userName, agents, activity, onNewTask, onNewAITeam, onNavigateToTask }: Props) {
+export default function HomeView({ userName, agents: _agents, activity, onNewTask, onNewAITeam, onNavigateToTask }: Props) {
   const [chatInput, setChatInput] = useState("");
   const [contexts, setContexts] = useState([{ id: "giga", label: "giga" }]);
 
-  const activeAgents = agents.filter((a) => a.status !== "idle");
   const runningTasks = activeTasks.filter((t) => t.status === "active").length;
   const waitingTasks = activeTasks.filter((t) => t.status === "waiting").length;
 

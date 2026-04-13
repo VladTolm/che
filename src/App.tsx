@@ -1,18 +1,15 @@
 import { useState, useMemo } from "react";
-import type { Team } from "./types";
 import type { Workspace, WorkspaceSubSection } from "./workspaceTypes";
 import type { AgentEditorConfig } from "./agentEditorTypes";
-import { agents, teams, currentTask, chatMessages, executionLog, taskDocTree, notifications as initialNotifications, activityFeed, userName } from "./data/mock";
+import { agents, currentTask, executionLog, taskDocTree, notifications as initialNotifications, activityFeed, userName } from "./data/mock";
 import { workspaces, wsAgents, wsSkills, universalAgent, historySessions } from "./data/workspaceMock";
 import { agentEditorConfigs } from "./data/agentEditorMock";
 import Sidebar from "./components/layout/Sidebar";
 import TopBar from "./components/layout/TopBar";
 import HomeView from "./components/views/HomeView";
 import TaskView from "./components/views/TaskView";
-import TeamView from "./components/views/TeamView";
 import NewTaskModal from "./components/modals/NewTaskModal";
 import CreateAITeamModal from "./components/modals/CreateAITeamModal";
-import PersonalAgentView from "./components/personal/PersonalAgentView";
 import WorkspaceView from "./components/workspace/WorkspaceView";
 import StartScreen from "./components/workspace/StartScreen";
 import HistoryView from "./components/workspace/HistoryView";
@@ -22,9 +19,8 @@ import AgentEditorView from "./components/agents/AgentEditorView";
 import AgentStarterScreen from "./components/agents/AgentStarterScreen";
 
 export default function App() {
-  const [activeNav, setActiveNav] = useState("company");
+  const [activeNav, setActiveNav] = useState("new-task");
   const [view, setView] = useState<"home" | "task">("home");
-  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [selectedWorkspace, setSelectedWorkspace] = useState<Workspace | null>(null);
   const [workspaceSubSection, setWorkspaceSubSection] = useState<WorkspaceSubSection>("new-task");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -47,25 +43,20 @@ export default function App() {
   const allWsAgents = [universalAgent, ...wsAgents];
 
   function handleNav(id: string) {
-    setSelectedTeam(null);
     setSelectedWorkspace(null);
     setActiveSessionId(null);
     setActiveNav(id);
-    if (id === "company") setView("home");
-    else setView("home");
+    if (id === "new-task") {
+      setShowNewTask(true);
+      setView("home");
+    } else {
+      setView("home");
+    }
   }
 
-  function handleSelectTeam(team: Team) {
-    setSelectedTeam(team);
-    setSelectedWorkspace(null);
-    setActiveSessionId(null);
-    setActiveNav(team.id);
-  }
-
-  function handleSelectWorkspace(ws: Workspace) {
+function handleSelectWorkspace(ws: Workspace) {
     setSelectedWorkspace(ws);
     setWorkspaceSubSection("new-task");
-    setSelectedTeam(null);
     setActiveSessionId(null);
     setActiveNav(`ws-${ws.id}`);
     setSidebarCollapsed(true);
@@ -80,9 +71,8 @@ export default function App() {
   }
 
   function handleNavigate(v: "home" | "task") {
-    setSelectedTeam(null);
     setView(v);
-    setActiveNav(v === "home" ? "company" : "company");
+    setActiveNav(v === "home" ? "new-task" : "new-task");
   }
 
   function handleMarkAllRead() {
@@ -116,7 +106,7 @@ export default function App() {
         <AgentEditorView
           config={editingAgent}
           onBack={() => {
-            const returnTo = preEditorNav ?? "company";
+            const returnTo = preEditorNav ?? "new-task";
             setEditingAgent(null);
             setPreEditorNav(null);
             setActiveNav(returnTo);
@@ -176,7 +166,7 @@ export default function App() {
           }}
           onBack={() => {
             setIsCreatingAgent(false);
-            const returnTo = preEditorNav ?? "company";
+            const returnTo = preEditorNav ?? "new-task";
             setPreEditorNav(null);
             setActiveNav(returnTo);
             if (returnTo.startsWith("ws-")) {
@@ -191,8 +181,20 @@ export default function App() {
         />
       );
     }
-    if (activeNav === "gigabrain") {
-      return <PersonalAgentView />;
+    if (activeNav === "history") {
+      return (
+        <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">
+          История задач — в разработке
+        </div>
+      );
+    }
+    if (activeNav === "digest" || activeNav === "calendar" || activeNav === "meetings") {
+      const labels: Record<string, string> = { digest: "Дайджест", calendar: "Календарь", meetings: "Встречи" };
+      return (
+        <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">
+          {labels[activeNav]} — в разработке
+        </div>
+      );
     }
     if (selectedWorkspace) {
       // Active session view
@@ -258,9 +260,6 @@ export default function App() {
           );
       }
     }
-    if (selectedTeam) {
-      return <TeamView team={selectedTeam} allAgents={agents} />;
-    }
     if (view === "home") {
       return (
         <HomeView
@@ -287,20 +286,18 @@ export default function App() {
     <div className="flex h-full overflow-hidden">
       <Sidebar
         activeNav={activeNav}
-        teams={teams}
         workspaces={workspaces}
         collapsed={sidebarCollapsed}
         waitingCounts={waitingCounts}
         onToggleCollapse={() => setSidebarCollapsed((v) => !v)}
         onNav={handleNav}
-        onSelectTeam={handleSelectTeam}
         onSelectWorkspace={handleSelectWorkspace}
       />
       <div className="flex-1 flex flex-col min-w-0 bg-content-bg">
-        {activeNav !== "gigabrain" && activeNav !== "agent-editor" && activeNav !== "agent-creator" && !selectedWorkspace && (
+        {activeNav !== "agent-editor" && activeNav !== "agent-creator" && !selectedWorkspace && (
           <TopBar
             view={view}
-            selectedTeam={selectedTeam}
+            selectedTeam={null}
             notifications={notifications}
             onNavigate={handleNavigate}
             onNewTask={() => setShowNewTask(true)}

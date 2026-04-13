@@ -3,7 +3,6 @@ import type { Workspace, SourceDocument, WorkspaceAgent, WorkspaceChatMessage, W
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import {
   sourceDocuments as initialDocs,
-  wsAgents,
   wsChatMessages,
   wsExecution as defaultExecution,
   wsArtifact as defaultArtifact,
@@ -43,7 +42,7 @@ export default function WorkspaceView({ workspace, sessionId, activeSection, wai
     "ws-agent-1": [...(sessionData?.messages ?? wsChatMessages)],
   });
 
-  const [activeAgent, setActiveAgent] = useState<WorkspaceAgent | null>(null);
+  const [activeAgent] = useState<WorkspaceAgent | null>(null);
   const currentKey = activeAgent?.id ?? "qa";
   const defaultMessages = sessionData?.messages ?? chatHistoryRef.current[currentKey] ?? [];
   const [messages, setMessages] = useState<WorkspaceChatMessage[]>(defaultMessages);
@@ -71,15 +70,6 @@ export default function WorkspaceView({ workspace, sessionId, activeSection, wai
   const [waitingReason, setWaitingReason] = useState<WsWaitingReason | null>(
     sessionData?.waitingReason ?? null
   );
-
-  function handleSelectAgent(agent: WorkspaceAgent | null) {
-    chatHistoryRef.current[currentKey] = messages;
-    const newKey = agent?.id ?? "qa";
-    const newMessages = chatHistoryRef.current[newKey] ?? [];
-    setActiveAgent(agent);
-    setMessages(newMessages);
-    setInput("");
-  }
 
   function handleSend() {
     if (!input.trim()) return;
